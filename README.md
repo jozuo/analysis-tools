@@ -4,7 +4,7 @@
 
 解析で利用できそうなツール群
 
-### git-change-files
+### app/git-change-files
 
 Gitのリビジョン間、ブランチ間で 変更があったファイルを抽出するプログラム。  
 
