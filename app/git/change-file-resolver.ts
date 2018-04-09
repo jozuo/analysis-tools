@@ -25,6 +25,10 @@ export class ChangeFileResolver {
         return (this.changeFileList) ? this.changeFileList.toString() : '';
     }
 
+    public getFiles(): ChangeFile[] {
+        return (this.changeFileList) ? this.changeFileList.getFiles() : [];
+    }
+
     /** for testing */
     public setGitCommand(gitCommand: GitCommand): void {
         this.gitCommand = gitCommand;
@@ -90,9 +94,13 @@ class ChangeFileList {
         });
         return `{ "total": ${this.files.length}, "items": [${result}]}`;
     }
+
+    public getFiles(): ChangeFile[] {
+        return this.files;
+    }
 }
 
-class ChangeFile {
+export class ChangeFile {
     private revision: string;
     private name: string;
     private status: string;

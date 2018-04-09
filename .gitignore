@@ -67,3 +67,7 @@ typings/
 
 # package.lock
 package-lock.json
+
+# output files
+file.txt
+file-revision.txt
