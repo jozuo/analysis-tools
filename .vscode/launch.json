@@ -9,7 +9,8 @@
             "args": [
                 "/Users/toru/work/professional-tool",
                 "origin/add_static_analysys",
-                "c59d1508e8876e7c91c9d3fb0465c67b50c665fd"
+                "c59d1508e8876e7c91c9d3fb0465c67b50c665fd",
+                "/tmp"
             ],
             "console": "integratedTerminal"
         },
