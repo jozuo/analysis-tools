@@ -15,7 +15,7 @@
     "typescript": "2.8.1"
   },
   "scripts": {
-    "pregit-change-files": "tsc",
+    "pregit-change-files": "tsc || true",
     "git-change-files": "node app/git-change-files.js"
   }
 }
