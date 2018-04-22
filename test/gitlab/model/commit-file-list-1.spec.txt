@@ -1,0 +1,3 @@
+app/hoge.ts,revision_hoge
+app/page.ts,revision_page
+app/foo.ts,revision_foo

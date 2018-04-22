@@ -1,0 +1,7 @@
+app/src/component/area-correction/area-correction.component.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
+app/src/component/color-matching/color-matching.component.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
+app/src/component/geometry-off/geometry-off.component.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
+app/src/component/splash-screen/splash-screen.component.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
+app/src/service/call-api.service.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
+app/src/service/loading.service.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
+app/src/service/projector-layout.service.ts,c59d1508e8876e7c91c9d3fb0465c67b50c665fd
