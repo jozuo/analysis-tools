@@ -9,7 +9,6 @@
             true,
             "single"
         ],
-        "eofline": false,
         "no-console": false,
         "max-classes-per-file": false,
         "ordered-imports": false,

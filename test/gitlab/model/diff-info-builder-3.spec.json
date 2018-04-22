@@ -1,0 +1,11 @@
+{
+  "diff": "--- a/app/src/component/area-correction/area-correction.component.ts\n+++ b/app/src/component/area-correction/area-correction.component.ts\n@@ -2,9 +2,9 @@ import { Component, Input, Inject, OnInit, OnDestroy } from '@angular/core';\n import { TranslateService } from 'ng2-translate';\n import * as Konva from 'konva';\n \n-import { AbstractPostCommandController } from \"../abstract.post-command.component\";\n+import { AbstractPostCommandController } from '../abstract.post-command.component';\n import { CallApiService } from '../../service/call-api.service';\n-import { CommandPostService, CommandsReqDto, CommandReqDto } from \"../../service/command-post.service\";\n+import { CommandPostService, CommandsReqDto, CommandReqDto } from '../../service/command-post.service';\n import { ProjectorLayoutService } from '../../service/projector-layout.service';\n import { LoadingService } from '../../service/loading.service';\n import { ModalService, iModal } from '../../service/modal.service';\n@@ -36,118 +36,200 @@ import {\n \tcmdParamTestPattern,\n \tCommonOption,\n \tCommonKey,\n-\tProgressType\n-} from \"../../constants\";\n+\tProgressType,\n+} from '../../constants';\n import { OptionDto } from '../../dto';\n import { Subject } from 'rxjs/Subject';\n \n",
+  "new_path": "app/src/component/area-correction/area-correction.component.ts",
+  "old_path": "old_path",
+  "a_mode": "100644",
+  "b_mode": "100644",
+  "new_file": false,
+  "renamed_file": false,
+  "deleted_file": false,
+  "too_large": null
+}

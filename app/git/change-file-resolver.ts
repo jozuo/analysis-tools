@@ -7,7 +7,7 @@ export class ChangeFileResolver {
     private fromBranch: string;
     private toBranch: string;
     private gitCommand: GitCommand;
-    private changeFileList: ChangeFileList | undefined;
+    private changeFileList?: ChangeFileList;
 
     constructor(path: string, fromBranch: string, toBranch: string) {
         this.fromBranch = fromBranch;
@@ -53,7 +53,7 @@ export class ChangeFileResolver {
 }
 
 export class GitCommand {
-    private path: string | undefined;
+    private path?: string;
 
     public setPath(path: string) {
         this.path = path;

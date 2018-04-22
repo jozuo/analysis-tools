@@ -1,0 +1,3 @@
+"app/src/service/projector-layout.service.ts",19,"Class name must be in pascal case"
+"app/src/service/projector-layout.service.ts",828,"if statements must be braced"
+"app/src/service/projector-layout.service.ts",259,"Identifier 'api2' is never reassigned; use 'const' instead of 'let'."
