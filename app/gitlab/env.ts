@@ -30,4 +30,21 @@ export class Env {
         }
         return process.env.GITLAB_TOKEN;
     }
+
+    public static isDebugEnable(): boolean {
+        const debug = process.env.DEBUG;
+        if (!debug) {
+            return false;
+        }
+        if (debug === '1') {
+            return true;
+        }
+        if (debug.toLowerCase() === 'true') {
+            return true;
+        }
+        if (debug.toLowerCase() === 'on') {
+            return true;
+        }
+        return false;
+    }
 }

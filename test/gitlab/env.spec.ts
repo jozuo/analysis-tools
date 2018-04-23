@@ -69,4 +69,33 @@ describe('Env', () => {
             assert(Env.getGitLabToken() === 'hogepagefoo');
         });
     });
+    describe('isDebugEnable()', () => {
+        it('環境変数が設定されていない場合', () => {
+            assert(Env.isDebugEnable() === false);
+        });
+        it('環境変数がセットされている場合1', () => {
+            process.env.DEBUG = '1';
+            assert(Env.isDebugEnable() === true);
+        });
+        it('環境変数がセットされている場合2', () => {
+            process.env.DEBUG = '1';
+            assert(Env.isDebugEnable() === true);
+        });
+        it('環境変数がセットされている場合3', () => {
+            process.env.DEBUG = 'true';
+            assert(Env.isDebugEnable() === true);
+        });
+        it('環境変数がセットされている場合4', () => {
+            process.env.DEBUG = 'TrUe';
+            assert(Env.isDebugEnable() === true);
+        });
+        it('環境変数がセットされている場合5', () => {
+            process.env.DEBUG = 'on';
+            assert(Env.isDebugEnable() === true);
+        });
+        it('環境変数がセットされている場合6', () => {
+            process.env.DEBUG = 'On';
+            assert(Env.isDebugEnable() === true);
+        });
+    });
 });
