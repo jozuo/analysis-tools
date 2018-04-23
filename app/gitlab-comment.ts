@@ -15,4 +15,8 @@ const commentFilePath = process.argv[3];
 const target = new CommitCommentRequester(revisionFilePath);
 target.postComment(commentFilePath).then(() => {
     console.log('done');
+    process.exit(0);
+}).catch((error) => {
+    console.log(error);
+    process.exit(9);
 });
