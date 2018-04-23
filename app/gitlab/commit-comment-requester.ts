@@ -9,8 +9,8 @@ export class CommitCommentRequester {
         this.revisionList = new RevisionInfoList(revisionFilePath);
     }
 
-    public async postComment(issueFilePath: string): Promise<void> {
-        const lines = fs.readFileSync(issueFilePath, 'UTF-8').split('\n');
+    public async postComment(commentFilePath: string): Promise<void> {
+        const lines = fs.readFileSync(commentFilePath, 'UTF-8').split('\n');
         const commitFileList = new CommitFileList(lines, this.revisionList);
         await commitFileList.postComment();
     }
