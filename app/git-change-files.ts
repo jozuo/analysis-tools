@@ -15,7 +15,7 @@ function outputFiles(files: ChangeFile[], dir: string): void {
     }).reduce((prev, current) => {
         return `${prev}\n${current}`;
     });
-    fs.writeFileSync(path.join(dir, './file.txt'), data);
+    fs.writeFileSync(path.join(dir, './diff-file.txt'), data);
 }
 
 function outputFileRevisions(files: ChangeFile[], dir: string): void {
@@ -24,7 +24,7 @@ function outputFileRevisions(files: ChangeFile[], dir: string): void {
     }).reduce((prev, current) => {
         return `${prev}\n${current}`;
     });
-    fs.writeFileSync(path.join(dir, './file-revision.txt'), data);
+    fs.writeFileSync(path.join(dir, './diff-file-revision.txt'), data);
 }
 
 if (process.argv.length !== 4) {
