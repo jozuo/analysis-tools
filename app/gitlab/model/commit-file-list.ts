@@ -10,7 +10,9 @@ export class CommitFileList {
         let prevFile: CommitFile;
         let currentFile: CommitFile;
 
-        lines.forEach((line, index) => {
+        lines.filter((line) => {
+            return line.trim().length > 0;
+        }).forEach((line, index) => {
             const filePath = this.getFilePath(line);
             if (!currentFile || (prevFile && !prevFile.isSamePath(filePath))) {
                 this.checkAlreadyExist(filePath);

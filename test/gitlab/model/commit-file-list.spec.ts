@@ -20,6 +20,7 @@ describe('CommitFileListSpec', () => {
                 '"app/page.ts", 13, "comment13"',
                 '"app/page.ts", 12, "comment12"',
                 '"app/foo.ts", 99, "comment99"',
+                ' ',
             ];
 
             // run
@@ -61,6 +62,7 @@ describe('CommitFileListSpec', () => {
                 '"app/bar.ts", 10, "comment"',
                 '"app/page.ts", 10, "comment"',
                 '"app/hoge.ts", 10, "comment"',
+                ' ',
             ];
 
             // run
