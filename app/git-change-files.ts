@@ -1,10 +1,11 @@
 /**
  * git-change-files
  *   arg1: workspace path
- *   arg2: from branch
- *   arg3: to branch
+ *   arg2: dest path
  */
-import { ChangeFileResolver, ChangeFile } from './git/change-file-resolver';
+import { ChangeFile } from './git/model/change-file';
+import { ChangeFileList } from './git/model/change-file-list';
+import { GitCommand } from './git/repository/git-command';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -26,18 +27,13 @@ function outputFileRevisions(files: ChangeFile[], dir: string): void {
     fs.writeFileSync(path.join(dir, './file-revision.txt'), data);
 }
 
-if (process.argv.length !== 6) {
+if (process.argv.length !== 4) {
     throw Error('Illegal arguments.');
 }
 
 const sourcePath = process.argv[2];
-const fromBranch = process.argv[3];
-const toBranch = process.argv[4];
-const destPath = process.argv[5];
+const destPath = process.argv[3];
 
-const resolver = new ChangeFileResolver(sourcePath, fromBranch, toBranch);
-resolver.resolve();
-
-const changeFiles = resolver.getFiles();
+const changeFiles = new ChangeFileList(new GitCommand(sourcePath)).getFiles();
 outputFiles(changeFiles, destPath);
 outputFileRevisions(changeFiles, destPath);
