@@ -6,7 +6,8 @@
     "clean": "find . -name '*.js' -or -name '*.js.map' -type f | grep -v node_modules | xargs rm",
     "test": "nyc mocha --require espower-typescript/guess 'test/**/*.ts'",
     "git-change-files": "node app/git-change-files.js",
-    "gitlab-comment": "node app/gitlab-comment.js"
+    "gitlab-comment": "node app/gitlab-comment.js",
+    "gitlab-commit-status": "node app/gitlab-commit-status.js"
   },
   "devDependencies": {
     "@types/mocha": "5.0.0",
