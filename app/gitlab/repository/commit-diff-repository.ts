@@ -1,7 +1,7 @@
 import { RequestWrapper } from './request-wrapper';
 import { CommitFile } from './../model/commit-file';
 import { DiffInfo, DiffInfoBuilder } from './../model/diff-info';
-import { Env } from './../env';
+import { Env } from './../../env';
 import * as path from 'path';
 import { AbstractRepository } from './abstract-repository';
 

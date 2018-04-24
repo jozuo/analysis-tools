@@ -2,7 +2,7 @@ import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
 import { CommitFile } from './../../../app/gitlab/model/commit-file';
 import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
-import { spy, when, anyString, anyNumber, verify, anything, mock, instance } from 'ts-mockito';
+import { spy, when, anyString, anyNumber, verify, anything, mock, instance, capture } from 'ts-mockito';
 import * as assert from 'assert';
 
 describe('CommitCommentRepository', () => {
@@ -104,9 +104,26 @@ describe('CommitCommentRepository', () => {
 
         });
         it('lineNoが指定され、リクエストが成功した場合', async () => {
-            postTest(10);
+            await postTest(10);
         });
-        async function postTest(lineNo: number): Promise<void> {
+        it('lineNoが指定されず、リクエストが成功した場合', async () => {
+            await postTest();
+        });
+        it('リクエストが失敗した場合', async () => {
+            // prepare
+            mocked = mock(RequestWrapper);
+            when(mocked.post(anything())).thenReject('failed');
+            (repository as any).request = instance(mocked);
+
+            // run
+            try {
+                const result = await (repository as any).post('revision1', 'comment1', 'path1');
+                assert.fail('エラーになるはず');
+            } catch (error) {
+                assert(error === 'POST operation failed.');
+            }
+        });
+        async function postTest(lineNo?: number): Promise<void> {
             // prepare
             mocked = mock(RequestWrapper);
             when(mocked.post(anything())).thenResolve('{}');
@@ -119,6 +136,15 @@ describe('CommitCommentRepository', () => {
             assert(result === '{}');
 
             // verify
+            verify(mocked.post(anything())).once();
+            const options = capture(mocked.post).last()[0];
+            assert(options.uri === 'http://localhost/api/v4/projects/id/repository/commits/revision1/comments');
+            assert(options.proxy === undefined);
+            assert(JSON.stringify(options.headers) === '{"PRIVATE-TOKEN":"token"}');
+            assert(options.form.note === 'comment1');
+            assert(options.form.path === 'path1');
+            assert(options.form.line === (lineNo) ? lineNo : -1);
+            assert(options.form.line_type === 'new');
         }
     });
 });

@@ -1,5 +1,5 @@
 import * as request from 'request-promise-native';
-import { Env } from '../env';
+import { Env } from '../../env';
 
 export class RequestWrapper {
     public async get(options: any) {
