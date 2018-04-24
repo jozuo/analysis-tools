@@ -1,15 +1,19 @@
 import { CommitCommentRequester } from './gitlab/commit-comment-requester';
 import * as request from 'request-promise-native';
+import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
 
 const HOST = 'localhost';
 
 describe('GitLabコミットコメントのテスト', () => {
     before(() => {
-        process.env.GITLAB_URL = `http://localhost/toru/professional-tool`;
+        process.env.GITLAB_URL = `http://gitlab/toru/professional-tool`;
         process.env.GITLAB_PROJECT_ID = '1';
-        process.env.GITLAB_TOKEN = 'tV6o8iYtFpKqFcTp9L_m';
+        process.env.GITLAB_TOKEN = 'r25vP4p9iRJg_ei7XqSg';
+        process.env.END_REVISION = 'ea65c6fe70564ef93d16424302f6b30b86091e94';
+        process.env.GITLAB_BRANCH = 'test';
+        process.env.BUILD_URL = 'http://localhost:8080/job/pro-tool-analysis/111/';
     });
-    it.only('テスト実行', async () => {
+    it('テスト実行', async () => {
         const target = new CommitCommentRequester('./test/gitlab/file-revision.txt');
         await target.postComment('./test/gitlab/tslint-result.csv');
     });
@@ -28,6 +32,10 @@ describe('GitLabコミットコメントのテスト', () => {
         request(options).then((response) => {
             getDiffInfo(response);
         });
+    });
+    it.only('コミットステータス通知', async () => {
+        const repository = new CommitStatusRepository();
+        await repository.post('success', 'テスト実行成功');
     });
 
     function getDiffInfo(response: any): void {
