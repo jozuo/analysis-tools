@@ -1,11 +1,43 @@
 import * as assert from 'assert';
-import { Env } from '../../app/gitlab/env';
+import { Env } from '../app/env';
 
 describe('Env', () => {
     beforeEach(() => {
+        process.env.BEGIN_REVISION = '';
+        process.env.END_REVISION = '';
         process.env.GITLAB_URL = '';
         process.env.GITLAB_PROJECT_ID = '';
         process.env.GITLAB_TOKEN = '';
+    });
+    describe('getBeginRevision()', () => {
+        it('環境変数がセットされていない場合', () => {
+            assert.throws(() => Env.getBeginRevision(), (error: any) => {
+                assert(error.message === 'BEGIN_REVISION is not defined.');
+                return true;
+            });
+        });
+        it('環境変数がセットされている場合', () => {
+            // prepare
+            process.env.BEGIN_REVISION = 'begin-revision';
+
+            // test
+            assert(Env.getBeginRevision() === 'begin-revision');
+        });
+    });
+    describe('getEndRevision()', () => {
+        it('環境変数がセットされていない場合', () => {
+            assert.throws(() => Env.getEndRevision(), (error: any) => {
+                assert(error.message === 'END_REVISION is not defined.');
+                return true;
+            });
+        });
+        it('環境変数がセットされている場合', () => {
+            // prepare
+            process.env.END_REVISION = 'end-revision';
+
+            // test
+            assert(Env.getEndRevision() === 'end-revision');
+        });
     });
     describe('getGitLabUrl()', () => {
         it('環境変数がセットされていない場合', () => {

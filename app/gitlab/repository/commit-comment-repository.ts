@@ -1,7 +1,7 @@
 import { RequestWrapper } from './request-wrapper';
 import { CommitComment } from './../model/commit-comment';
 import { CommitFile } from './../model/commit-file';
-import { Env } from './../env';
+import { Env } from './../../env';
 import { AbstractRepository } from './abstract-repository';
 import * as path from 'path';
 

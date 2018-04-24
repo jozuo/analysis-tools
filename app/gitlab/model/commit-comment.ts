@@ -1,4 +1,4 @@
-import { Env } from './../env';
+import { Env } from './../../env';
 import { DiffInfo } from './diff-info';
 import { CommitFile } from './commit-file';
 import { RevisionInfo } from './revision-info';
