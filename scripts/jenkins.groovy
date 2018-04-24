@@ -69,19 +69,17 @@ def debugEnvironment() {
 }
 
 def setupEnvironment() {
-    dir('source') {
-        withCredentials([
-            usernamePassword(
-                credentialsId: "${env.GITLAB_CREDENTIAL_PROJECT}",
-                passwordVariable: 'API_TOKEN',
-                usernameVariable: 'API_USER')]) {
-    
-            env.GITLAB_TOKEN = API_TOKEN
-            env.GITLAB_URL = env.gitlabSourceRepoHomepage
-            env.GITLAB_BRANCH = env.gitlabTargetBranch
-            env.END_REVISION = env.gitlabAfter
-            env.DEBUG = true
-        }
+    withCredentials([
+        usernamePassword(
+            credentialsId: "${env.GITLAB_CREDENTIAL_PROJECT}",
+            passwordVariable: 'API_TOKEN',
+            usernameVariable: 'API_USER')]) {
+
+        env.GITLAB_TOKEN = API_TOKEN
+        env.GITLAB_URL = env.gitlabSourceRepoHomepage
+        env.GITLAB_BRANCH = env.gitlabTargetBranch
+        env.END_REVISION = env.gitlabAfter
+        env.DEBUG = true
     }
 }
 
