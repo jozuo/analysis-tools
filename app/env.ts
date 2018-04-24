@@ -45,6 +45,20 @@ export class Env {
         return process.env.GITLAB_TOKEN;
     }
 
+    public static getGitLabBranch(): string {
+        if (!process.env.GITLAB_BRANCH) {
+            throw new Error('GITLAB_BRANCH is not defined.');
+        }
+        return process.env.GITLAB_BRANCH;
+    }
+
+    public static getJenkinsBuildUrl(): string {
+        if (!process.env.BUILD_URL) {
+            throw new Error('BUILD_URL is not defined.');
+        }
+        return process.env.BUILD_URL;
+    }
+
     public static isDebugEnable(): boolean {
         const debug = process.env.DEBUG;
         if (!debug) {

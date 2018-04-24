@@ -8,6 +8,8 @@ describe('Env', () => {
         process.env.GITLAB_URL = '';
         process.env.GITLAB_PROJECT_ID = '';
         process.env.GITLAB_TOKEN = '';
+        process.env.GITLAB_BRANCH = '';
+        process.env.BUILD_URL = '';
     });
     describe('getBeginRevision()', () => {
         it('環境変数がセットされていない場合', () => {
@@ -99,6 +101,36 @@ describe('Env', () => {
 
             // test
             assert(Env.getGitLabToken() === 'hogepagefoo');
+        });
+    });
+    describe('getGitLabBranch()', () => {
+        it('環境変数が設定されていない場合', () => {
+            assert.throws(() => Env.getGitLabBranch(), (error: any) => {
+                assert(error.message === 'GITLAB_BRANCH is not defined.');
+                return true;
+            });
+        });
+        it('環境変数がセットされている場合', () => {
+            // prepare
+            process.env.GITLAB_BRANCH = 'branch_name';
+
+            // test
+            assert(Env.getGitLabBranch() === 'branch_name');
+        });
+    });
+    describe('getJenkinsBuildUrl()', () => {
+        it('環境変数が設定されていない場合', () => {
+            assert.throws(() => Env.getJenkinsBuildUrl(), (error: any) => {
+                assert(error.message === 'BUILD_URL is not defined.');
+                return true;
+            });
+        });
+        it('環境変数がセットされている場合', () => {
+            // prepare
+            process.env.BUILD_URL = 'http://jenkins:8080/job/5';
+
+            // test
+            assert(Env.getJenkinsBuildUrl() === 'http://jenkins:8080/job/5');
         });
     });
     describe('isDebugEnable()', () => {

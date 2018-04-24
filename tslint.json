@@ -12,7 +12,8 @@
         "no-console": false,
         "max-classes-per-file": false,
         "ordered-imports": false,
-        "object-literal-sort-keys": false
+        "object-literal-sort-keys": false,
+        "object-literal-shorthand": false
     },
     "rulesDirectory": []
 }
