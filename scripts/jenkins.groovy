@@ -8,7 +8,7 @@ def init() {
 def preProcess() {
     cloneSource()
     resolveBeginRevision()
-	debugEnvironment()
+	// debugEnvironment()
 	resolveDiffFiles()
 }
 
