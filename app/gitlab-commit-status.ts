@@ -7,7 +7,8 @@
 import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
 
 const statuses = ['running', 'success', 'failed'];
-if (process.argv.length !== 3) {
+
+if (process.argv.length < 3) {
     throw Error('Illegal arguments.');
 }
 
