@@ -26,8 +26,8 @@ export class CommitStatusRepository extends AbstractRepository {
                         ref: Env.getGitLabBranch(),
                         name: 'jenkins',
                         target_url: Env.getJenkinsBuildUrl(),
-                        description: description,
-                        coverage: coverage,
+                        description: (description) ? description : undefined,
+                        coverage: (coverage) ? coverage : undefined,
                     },
                 };
 
