@@ -84,7 +84,7 @@ def setupEnvironment() {
 
 def cloneSource() {
     dir('source') {
-        git url: "${env.gitlabSourceRepoHomepage}",
+        git url: "${env.gitlabSourceRepoHomepage}.git",
             branch: "${env.gitlabTargetBranch}",
             credentialsId: "${env.GITLAB_CREDENTIAL_PROJECT}"
     }
