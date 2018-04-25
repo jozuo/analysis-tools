@@ -28,6 +28,7 @@ def changeGitLabStatus(status, description=null, coverage=null) {
     dir('node-tool') {
         docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
             sh """
+                ${env.PROXY_SETTING}
                 yarn run gitlab-commit-status ${status} ${description} ${coverage}
             """
         }
@@ -38,6 +39,7 @@ def commentToGitLab(commentFilePath) {
     dir('node-tool') {
         docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
             sh """
+                ${env.PROXY_SETTING}
                 yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${commentFilePath}\"
             """
         }
