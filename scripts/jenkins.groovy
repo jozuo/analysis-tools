@@ -12,8 +12,8 @@ def preProcess() {
 	resolveDiffFiles()
 }
 
-def postProcess() {
-    commentToGitLab()
+def postProcess(commentFilePath) {
+    commentToGitLab(commentFilePath)
     changeGitLabStatus('success', 'jenkinsジョブが正常に終了しました') 
 }
 
@@ -34,11 +34,11 @@ def changeGitLabStatus(status, description=null, coverage=null) {
     }
 }
 
-def commentToGitLab() {
+def commentToGitLab(commentFilePath) {
     dir('node-tool') {
         docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
             sh """
-                yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${env.WORKSPACE}/tslint-result.csv\"
+                yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${commentFilePath}\"
             """
         }
     }
