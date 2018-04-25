@@ -25,35 +25,32 @@ def errorProcess() {
 // --- private
 
 def changeGitLabStatus(status, description=null, coverage=null) {
-    dir('node-tool') {
-        docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
-            sh """
-                ${env.PROXY_SETTING}
-                yarn run gitlab-commit-status ${status} ${description} ${coverage}
-            """
-        }
+    docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+        sh """
+            ${env.PROXY_SETTING}
+            cd node-tool
+            yarn run gitlab-commit-status ${status} ${description} ${coverage}
+        """
     }
 }
 
 def commentToGitLab(commentFilePath) {
-    dir('node-tool') {
-        docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
-            sh """
-                ${env.PROXY_SETTING}
-                yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${commentFilePath}\"
-            """
-        }
+    docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+        sh """
+            ${env.PROXY_SETTING}
+            cd node-tool
+            yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${commentFilePath}\"
+        """
     }
 }
 
 def resolveDiffFiles() {
-    dir('node-tool') {
-        docker.image('seig/analysys-tool:latest').inside {
-            sh """
-                ${env.PROXY_SETTING}
-                yarn run git-change-files \"${env.WORKSPACE}/source\" \"${env.WORKSPACE}\"
-            """
-        }
+    docker.image('seig/analysys-tool:latest').inside {
+        sh """
+            ${env.PROXY_SETTING}
+            cd node-tool
+            yarn run git-change-files \"${env.WORKSPACE}/source\" \"${env.WORKSPACE}\"
+        """
     }
 }
 
