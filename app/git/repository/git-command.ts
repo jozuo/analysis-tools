@@ -6,6 +6,9 @@ export class GitCommand {
 
     constructor(path: string) {
         this.path = path;
+        console.log('========== debug ==========');
+        console.log(`path: ${path}`);
+        console.log('========== debug ==========');
     }
 
     public getDiffFiles(from: string, to: string): string[] {
