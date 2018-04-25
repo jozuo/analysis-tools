@@ -1,22 +1,22 @@
 import { DiffInfoBuilder, DiffInfo } from './../../../app/gitlab/model/diff-info';
 import { Range } from './../../../app/gitlab/model/range';
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
-import { CommitFile } from './../../../app/gitlab/model/commit-file';
+import { Commit } from './../../../app/gitlab/model/commit-file';
 import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
 import { mock, instance, when, anything, verify, deepEqual, capture, reset } from 'ts-mockito/lib/ts-mockito';
 import * as assert from 'assert';
 
 describe('CommentFile', () => {
-    let commitFile: CommitFile;
+    let commitFile: Commit;
     before(() => {
-        commitFile = new CommitFile('path string', 'revision string');
+        commitFile = new Commit('path string', 'revision string');
     });
     describe('Getter', () => {
         it('getPath()', () => {
             assert(commitFile.getPath() === 'path string');
         });
         it('getRevision()', () => {
-            assert(commitFile.getRevision() === 'revision string');
+            assert(commitFile.getHash() === 'revision string');
         });
     });
     describe('isSamePath()', () => {
@@ -40,14 +40,14 @@ describe('CommentFile', () => {
     });
     describe('compareTo()', () => {
         it('revisonが異なる場合', () => {
-            const obj1 = new CommitFile('hoge', 'page');
-            const obj2 = new CommitFile('foo', 'bar');
+            const obj1 = new Commit('hoge', 'page');
+            const obj2 = new Commit('foo', 'bar');
             assert(obj1.compareTo(obj2) === 1);
             assert(obj2.compareTo(obj1) === -1);
         });
         it('revisionが同じ場合', () => {
-            const obj1 = new CommitFile('page', 'hoge');
-            const obj2 = new CommitFile('foo', 'hoge');
+            const obj1 = new Commit('page', 'hoge');
+            const obj2 = new Commit('foo', 'hoge');
             assert(obj1.compareTo(obj2) === 1);
             assert(obj2.compareTo(obj1) === -1);
         });

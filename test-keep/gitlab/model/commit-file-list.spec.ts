@@ -1,7 +1,7 @@
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
 import { CommitFileList } from './../../../app/gitlab/model/commit-file-list';
 import { RevisionInfoList } from '../../../app/gitlab/model/revision-info-list';
-import { CommitFile } from '../../../app/gitlab/model/commit-file';
+import { Commit } from '../../../app/gitlab/model/commit-file';
 import { CommitCommentRepository } from '../../../app/gitlab/repository/commit-comment-repository';
 import * as assert from 'assert';
 
@@ -27,19 +27,19 @@ describe('CommitFileListSpec', () => {
             commitFileList = new CommitFileList(lines, revisionInfoList);
 
             // test
-            const commitFiles: CommitFile[] = (commitFileList as any).commitFiles;
+            const commitFiles: Commit[] = (commitFileList as any).commitFiles;
 
             assert(commitFiles.length === 3);
             // - 1ファイル目
             assert(commitFiles[0].getPath() === 'app/foo.ts');
-            assert(commitFiles[0].getRevision() === 'revision_foo');
+            assert(commitFiles[0].getHash() === 'revision_foo');
             commitComments = (commitFiles[0] as any).commitComments;
             assert(commitComments.length === 1);
             assert(commitComments[0].getLineNo() === 99);
 
             // - 2ファイル目
             assert(commitFiles[1].getPath() === 'app/hoge.ts');
-            assert(commitFiles[1].getRevision() === 'revision_hoge');
+            assert(commitFiles[1].getHash() === 'revision_hoge');
             commitComments = (commitFiles[1] as any).commitComments;
             assert(commitComments.length === 2);
             assert(commitComments[0].getLineNo() === 20);
@@ -47,7 +47,7 @@ describe('CommitFileListSpec', () => {
 
             // - 3ファイル目
             assert(commitFiles[2].getPath() === 'app/page.ts');
-            assert(commitFiles[2].getRevision() === 'revision_page');
+            assert(commitFiles[2].getHash() === 'revision_page');
             commitComments = (commitFiles[2] as any).commitComments;
             assert(commitComments.length === 3);
             assert(commitComments[0].getLineNo() === 11);
@@ -69,21 +69,21 @@ describe('CommitFileListSpec', () => {
             commitFileList = new CommitFileList(lines, revisionInfoList);
 
             // test
-            const commitFiles: CommitFile[] = (commitFileList as any).commitFiles;
+            const commitFiles: Commit[] = (commitFileList as any).commitFiles;
 
             assert(commitFiles.length === 4);
             // - 1ファイル目
             assert(commitFiles[0].getPath() === 'app/hoge.ts');
-            assert(commitFiles[0].getRevision() === 'revision1');
+            assert(commitFiles[0].getHash() === 'revision1');
             // - 2ファイル目
             assert(commitFiles[1].getPath() === 'app/page.ts');
-            assert(commitFiles[1].getRevision() === 'revision1');
+            assert(commitFiles[1].getHash() === 'revision1');
             // - 3ファイル目
             assert(commitFiles[2].getPath() === 'app/bar.ts');
-            assert(commitFiles[2].getRevision() === 'revision2');
+            assert(commitFiles[2].getHash() === 'revision2');
             // - 4ファイル目
             assert(commitFiles[3].getPath() === 'app/foo.ts');
-            assert(commitFiles[3].getRevision() === 'revision2');
+            assert(commitFiles[3].getHash() === 'revision2');
         });
         it('ファイルが連続せず重複している場合', () => {
             revisionInfoList = new RevisionInfoList('./test/gitlab/model/commit-file-list-1.spec.txt');

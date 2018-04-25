@@ -1,7 +1,7 @@
 import { Range } from './../../../app/gitlab/model/range';
 import { DiffInfo, DiffInfoBuilder } from './../../../app/gitlab/model/diff-info';
 import { CommitDiffRepository } from './../../../app/gitlab/repository/commit-diff-repository';
-import { CommitFile } from '../../../app/gitlab/model/commit-file';
+import { Commit } from '../../../app/gitlab/model/commit-file';
 import { spy, when, anyString, verify, mock, anything, instance, capture } from 'ts-mockito';
 import * as fs from 'fs';
 import * as assert from 'assert';
@@ -28,8 +28,8 @@ describe('DiffInfoRepository', () => {
             when<DiffInfo[]>(spied.getDiffInfos(anyString())).thenResolve(diffInfos);
 
             // run
-            const result1 = await repository.getDiffInfo(new CommitFile('app/file01.ts', 'reivsion1'));
-            const result2 = await repository.getDiffInfo(new CommitFile('app/file02.ts', 'reivsion1'));
+            const result1 = await repository.getDiffInfo(new Commit('app/file01.ts', 'reivsion1'));
+            const result2 = await repository.getDiffInfo(new Commit('app/file02.ts', 'reivsion1'));
 
             // assert
             assert(result1.getPath() === 'app/file01.ts');
@@ -45,8 +45,8 @@ describe('DiffInfoRepository', () => {
             when<DiffInfo[]>(spied.getDiffInfos(anyString())).thenResolve(diffInfos);
 
             // run
-            const result1 = await repository.getDiffInfo(new CommitFile('app/file01.ts', 'revision1'));
-            const result2 = await repository.getDiffInfo(new CommitFile('app/file02.ts', 'revision2'));
+            const result1 = await repository.getDiffInfo(new Commit('app/file01.ts', 'revision1'));
+            const result2 = await repository.getDiffInfo(new Commit('app/file02.ts', 'revision2'));
 
             // assert
             assert(result1.getPath() === 'app/file01.ts');

@@ -1,16 +1,16 @@
 import { Range } from './range';
 
 export class DiffInfo {
-    private path: string;
+    private filePath: string;
     private ranges: Range[] = [];
 
     constructor(builder: DiffInfoBuilder) {
-        this.path = builder.path || '';
+        this.filePath = builder.filePath || '';
         this.ranges = builder.ranges;
     }
 
-    public getPath(): string {
-        return this.path;
+    public getFilePath(): string {
+        return this.filePath;
     }
 
     public getRanges(): Range[] {
@@ -24,7 +24,7 @@ export class DiffInfo {
 }
 
 export class DiffInfoBuilder {
-    public path?: string;
+    public filePath?: string;
     public ranges: Range[] = [];
 
     private json: any;
@@ -35,7 +35,7 @@ export class DiffInfoBuilder {
     }
 
     public build(): DiffInfo {
-        this.path = this.json.new_path;
+        this.filePath = this.json.new_path;
         const matches = this.json.diff.toString().match(/@@ -(\d+?),(\d+?) \+(\d+?),(\d+?) @@/g);
         if (matches) {
             this.ranges = matches.map((lineInfo: any) => {

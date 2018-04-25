@@ -1,5 +1,5 @@
 import { RevisionInfoList } from '../../../app/gitlab/model/revision-info-list';
-import { RevisionInfo } from '../../../app/gitlab/model/revision-info';
+import { CommitFileRelation } from '../../../app/gitlab/model/revision-info';
 import * as assert from 'assert';
 
 describe('RevisionInfoList', () => {
@@ -9,12 +9,12 @@ describe('RevisionInfoList', () => {
             revisionInfoList = new RevisionInfoList('test/gitlab/model/revision-info-list-1.spec.txt');
             assert.ok(revisionInfoList);
 
-            const revisionInfos: RevisionInfo[] = (revisionInfoList as any).revisionInfos;
+            const revisionInfos: CommitFileRelation[] = (revisionInfoList as any).revisionInfos;
             assert(revisionInfos.length === 2);
-            assert(revisionInfos[0].getFile() === 'app/src/component/area-correction/area-correction.component.ts');
-            assert(revisionInfos[0].getRevision() === 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd');
-            assert(revisionInfos[1].getFile() === 'app/src/component/color-matching/color-matching.component.ts');
-            assert(revisionInfos[1].getRevision() === 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd');
+            assert(revisionInfos[0].getFilePath() === 'app/src/component/area-correction/area-correction.component.ts');
+            assert(revisionInfos[0].getCommitHash() === 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd');
+            assert(revisionInfos[1].getFilePath() === 'app/src/component/color-matching/color-matching.component.ts');
+            assert(revisionInfos[1].getCommitHash() === 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd');
         });
         it('データが存在しない場合', () => {
             try {

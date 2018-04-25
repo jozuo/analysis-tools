@@ -11,7 +11,7 @@ export class ChangeFileList {
         this.gitCommand = gitCommand;
 
         const revisions = this.gitCommand.getRevisions(
-            Env.getBeginRevision(), Env.getEndRevision());
+            Env.getCommitHashBegin(), Env.getCommitHashEnd());
         this.resolve(revisions);
     }
 
@@ -21,7 +21,7 @@ export class ChangeFileList {
 
     private resolve(revisions: string[]): void {
         revisions.forEach((revision, index) => {
-            const from = (index === revisions.length - 1) ? Env.getBeginRevision() : revisions[index + 1];
+            const from = (index === revisions.length - 1) ? Env.getCommitHashBegin() : revisions[index + 1];
             const lines = this.gitCommand.getDiffFiles(from, revision);
 
             lines.filter((line) => {

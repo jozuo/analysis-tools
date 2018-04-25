@@ -1,6 +1,6 @@
 import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
-import { CommitFile } from './../../../app/gitlab/model/commit-file';
+import { Commit } from './../../../app/gitlab/model/commit-file';
 import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
 import { spy, when, anyString, anyNumber, verify, anything, mock, instance, capture } from 'ts-mockito';
 import * as assert from 'assert';
@@ -12,10 +12,10 @@ describe('CommitCommentRepository', () => {
         repository = new CommitCommentRepository();
     });
     describe('postSummaryComment()', () => {
-        let commitFile: CommitFile;
+        let commitFile: Commit;
 
         beforeEach(() => {
-            commitFile = new CommitFile('path string', 'revision string');
+            commitFile = new Commit('path string', 'revision string');
         });
         it('summaryCommentが無い場合', async () => {
             // prepare
@@ -64,7 +64,7 @@ describe('CommitCommentRepository', () => {
         let commitComment: CommitComment;
 
         beforeEach(() => {
-            commitComment = new CommitComment(new CommitFile('path', 'revision'), ',123,message');
+            commitComment = new CommitComment(new Commit('path', 'revision'), ',123,message');
             const spiedCommitComment = spy(commitComment);
             when(spiedCommitComment.getIndividualMessage()).thenReturn('individual message');
         });

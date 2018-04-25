@@ -1,4 +1,4 @@
-import { CommitCommentRequester } from './gitlab/commit-comment-requester';
+import { CommitList } from './gitlab/model/commit-list';
 import * as request from 'request-promise-native';
 import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
 
@@ -9,13 +9,13 @@ describe('GitLabコミットコメントのテスト', () => {
         process.env.GITLAB_URL = `http://gitlab/toru/professional-tool`;
         process.env.GITLAB_PROJECT_ID = '1';
         process.env.GITLAB_TOKEN = 'r25vP4p9iRJg_ei7XqSg';
-        process.env.END_REVISION = 'ea65c6fe70564ef93d16424302f6b30b86091e94';
+        process.env.COMMIT_HASH_END = 'ea65c6fe70564ef93d16424302f6b30b86091e94';
         process.env.GITLAB_BRANCH = 'test';
         process.env.BUILD_URL = 'http://localhost:8080/job/pro-tool-analysis/111/';
     });
-    it('テスト実行', async () => {
-        const target = new CommitCommentRequester('./test/gitlab/file-revision.txt');
-        await target.postComment('./test/gitlab/tslint-result.csv');
+    it.only('テスト実行', async () => {
+        const target = new CommitList('./test/gitlab/tslint-result.csv');
+        await target.postComment();
     });
     it('diffの解析', () => {
         const revision = 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd';

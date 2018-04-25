@@ -1,13 +1,13 @@
 import { Range } from './../../../app/gitlab/model/range';
 import { DiffInfo, DiffInfoBuilder } from './../../../app/gitlab/model/diff-info';
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
-import { CommitFile } from './../../../app/gitlab/model/commit-file';
+import { Commit } from './../../../app/gitlab/model/commit-file';
 import * as assert from 'assert';
 
 describe('CommitComment', () => {
-    let commitFile: CommitFile;
+    let commitFile: Commit;
     before(() => {
-        commitFile = new CommitFile('path string', 'revision string');
+        commitFile = new Commit('path string', 'revision string');
     });
     describe('constructor', () => {
         it('引数が不正な場合1', () => {
@@ -35,10 +35,10 @@ describe('CommitComment', () => {
             instance = new CommitComment(commitFile, line);
             assert(instance.getFilePath() === 'path string');
         });
-        it('getRevision()', () => {
+        it('getCommitHash()', () => {
             const line = '"file path", 123, "comment message"';
             instance = new CommitComment(commitFile, line);
-            assert(instance.getRevision() === 'revision string');
+            assert(instance.getCommitHash() === 'revision string');
         });
         it('getLineNo()', () => {
             const line = '"file path", 123, "comment message"';

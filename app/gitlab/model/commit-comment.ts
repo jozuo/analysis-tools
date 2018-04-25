@@ -1,50 +1,52 @@
+import { DiffInfoList } from './../diff-info-list';
 import { Env } from './../../env';
 import { DiffInfo } from './diff-info';
-import { CommitFile } from './commit-file';
-import { RevisionInfo } from './revision-info';
+import { Commit } from './commit';
 import * as request from 'request-promise-native';
 import * as path from 'path';
 
 export class CommitComment {
-    private parent: CommitFile;
+    private commit: Commit;
+    private filePath: string;
     private lineNo: number;
     private message: string;
     private level?: string;
     private ruleName?: string;
     private ruleUrl?: string;
 
-    constructor(parent: CommitFile, line: string) {
+    constructor(commit: Commit, line: string) {
         if (line.split(',').length < 3) {
             throw Error(`line=[${line}] is illegal.`);
         }
-        this.parent = parent;
-        this.lineNo = Number(line.split(',')[1].trim());
-        this.message = this.removeComma(line.split(',')[2]);
-        if (this.isDefine(line, 3)) {
-            this.level = this.removeComma(line.split(',')[3]);
-        }
+        this.commit = commit;
+        this.filePath = this.removeComma(line.split(',')[1]);
+        this.lineNo = Number(line.split(',')[2].trim());
+        this.message = this.removeComma(line.split(',')[3]);
         if (this.isDefine(line, 4)) {
-            this.ruleName = this.removeComma(line.split(',')[4]);
+            this.level = this.removeComma(line.split(',')[4]);
         }
         if (this.isDefine(line, 5)) {
-            this.ruleUrl = this.removeComma(line.split(',')[5]);
+            this.ruleName = this.removeComma(line.split(',')[5]);
+        }
+        if (this.isDefine(line, 6)) {
+            this.ruleUrl = this.removeComma(line.split(',')[6]);
         }
     }
 
     public getFilePath(): string {
-        return this.parent.getPath();
+        return this.filePath;
     }
 
-    public getRevision(): string {
-        return this.parent.getRevision();
+    public getCommitHash(): string {
+        return this.commit.getHash();
     }
 
     public getLineNo(): number {
         return this.lineNo;
     }
 
-    public isInModifiedLine(diffInfo: DiffInfo): boolean {
-        return diffInfo.isModifiedLine(this.lineNo);
+    public isInModifiedLine(diffInfoList: DiffInfoList): boolean {
+        return diffInfoList.isModifiedLine(this.filePath, this.lineNo);
     }
 
     public getIndividualMessage(): string {
@@ -60,7 +62,7 @@ export class CommitComment {
         return Env.getGitLabUrl()
             + path.join(
                 '/blob',
-                this.getRevision(),
+                this.getCommitHash(),
                 this.getFilePath(),
                 `#L${this.getLineNo()}`);
     }

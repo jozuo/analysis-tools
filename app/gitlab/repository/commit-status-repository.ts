@@ -13,7 +13,7 @@ export class CommitStatusRepository extends AbstractRepository {
             setTimeout(() => {
                 const endpoint = Env.getGitLabAPIEndPoint();
                 const token = Env.getGitLabToken();
-                const revision = Env.getEndRevision();
+                const revision = Env.getCommitHashEnd();
 
                 const options = {
                     uri: endpoint + path.join('/statuses', revision),

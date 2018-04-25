@@ -7,7 +7,7 @@ def init() {
 
 def preProcess() {
     cloneSource()
-    resolveBeginRevision()
+    resolveCommitHashBegin()
 	// debugEnvironment()
 	resolveDiffFiles()
 }
@@ -61,8 +61,8 @@ def debugEnvironment() {
 	echo "GITLAB_URL: ${env.GITLAB_URL}"
 	echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
 	echo "GITLAB_BRANCH: ${env.GITLAB_BRANCH}"
-	echo "BEGIN_REVISION: ${env.BEGIN_REVISION}"
-	echo "END_REVISION: ${env.END_REVISION}"
+	echo "COMMIT_HASH_BEGIN: ${env.COMMIT_HASH_BEGIN}"
+	echo "COMMIT_HASH_END: ${env.COMMIT_HASH_END}"
 	echo "BUILD_URL: ${env.BUILD_URL}"
 	echo "DEBUG: ${env.DEBUG}"
 }
@@ -77,7 +77,7 @@ def setupEnvironment() {
         env.GITLAB_TOKEN = API_TOKEN
         env.GITLAB_URL = env.gitlabSourceRepoHomepage
         env.GITLAB_BRANCH = env.gitlabTargetBranch
-        env.END_REVISION = env.gitlabAfter
+        env.COMMIT_HASH_END = env.gitlabAfter
         env.DEBUG = true
     }
 }
@@ -102,7 +102,7 @@ def initTool() {
     }
 }
 
-def resolveBeginRevision() {
+def resolveCommitHashBegin() {
     dir('source') {
 	    if  ("${env.gitLabBefore}" ==~ /^0+$/)  {
             def stdout = sh returnStdout: true, script:
@@ -113,9 +113,9 @@ def resolveBeginRevision() {
                   head -1 | \
                   awk -F\'[]~^[]\' \'{print $2}\'
                 '''
-            env.BEGIN_REVISION = stdout.trim()
+            env.COMMIT_HASH_BEGIN = stdout.trim()
         } else { 
-            env.BEGIN_REVISION = env.gitLabBefore;
+            env.COMMIT_HASH_BEGIN = env.gitLabBefore;
         }
     }
 }
