@@ -47,13 +47,12 @@ def commentToGitLab(commentFilePath) {
 }
 
 def resolveDiffFiles() {
-    dir('node-tool') {
-        docker.image('seig/analysys-tool:latest').inside {
-            sh """
-                ${env.PROXY_SETTING}
-                yarn run git-change-files \"${env.WORKSPACE}/source\" \"${env.WORKSPACE}\"
-            """
-        }
+    docker.image('seig/analysys-tool:latest').inside {
+        sh """
+            ${env.PROXY_SETTING}
+            cd node-tool
+            yarn run git-change-files \"${env.WORKSPACE}/source\" \"${env.WORKSPACE}\"
+        """
     }
 }
 
