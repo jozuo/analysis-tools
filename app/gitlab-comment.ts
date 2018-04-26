@@ -8,7 +8,7 @@ if (process.argv.length !== 3) {
     throw Error('Illegal arguments.');
 }
 
-const commentFilePath = process.argv[3];
+const commentFilePath = process.argv[2];
 new CommitList(commentFilePath).postComment().then(() => {
     console.log('done');
     process.exit(0);
