@@ -13,10 +13,10 @@ export class CommitStatusRepository extends AbstractRepository {
             setTimeout(() => {
                 const endpoint = Env.getGitLabAPIEndPoint();
                 const token = Env.getGitLabToken();
-                const revision = Env.getCommitHashEnd();
+                const commitHash = Env.getCommitHashEnd();
 
                 const options = {
-                    uri: endpoint + path.join('/statuses', revision),
+                    uri: endpoint + path.join('/statuses', commitHash),
                     proxy: process.env.PROXY || undefined,
                     headers: {
                         'PRIVATE-TOKEN': token,

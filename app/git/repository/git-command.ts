@@ -13,7 +13,7 @@ export class GitCommand {
         return exec(command, { cwd: this.path }).toString().split('\n');
     }
 
-    public getRevisions(from: string, to: string): string[] {
+    public getCommits(from: string, to: string): string[] {
         const command = `git log --pretty=format:%H ${from}..${to}`;
         return exec(command, { cwd: this.path }).toString().split('\n');
     }

@@ -24,11 +24,11 @@ describe('GitLabコミットコメントのテスト', () => {
         await target.postComment();
     });
     it('diffの解析', () => {
-        const revision = 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd';
+        const commitHash = 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd';
         const token = 'tV6o8iYtFpKqFcTp9L_m';
         const options = {
             method: 'GET',
-            uri: `http://${HOST}/api/v4/projects/2/repository/commits/${revision}/diff`,
+            uri: `http://${HOST}/api/v4/projects/2/repository/commits/${commitHash}/diff`,
             proxy: process.env.PROXY || undefined,
             headers: {
                 'PRIVATE-TOKEN': token,

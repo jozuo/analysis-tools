@@ -1,16 +1,16 @@
 export class ChangeFile {
-    private revision: string;
+    private commitHash: string;
     private name: string;
     private status: string;
 
-    constructor(revision: string, name: string, status: string) {
-        this.revision = revision;
+    constructor(commitHash: string, name: string, status: string) {
+        this.commitHash = commitHash;
         this.name = name;
         this.status = status;
     }
 
-    public getRevision(): string {
-        return this.revision;
+    public getCommitHash(): string {
+        return this.commitHash;
     }
 
     public getName(): string {

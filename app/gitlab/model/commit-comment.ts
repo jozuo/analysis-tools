@@ -15,7 +15,7 @@ export class CommitComment {
     private ruleUrl?: string;
 
     constructor(commit: Commit, line: string) {
-        if (line.split(',').length < 3) {
+        if (line.split(',').length < 4) {
             throw Error(`line=[${line}] is illegal.`);
         }
         this.commit = commit;

@@ -3,42 +3,42 @@ import { Env } from '../app/env';
 
 describe('Env', () => {
     beforeEach(() => {
-        process.env.BEGIN_REVISION = '';
-        process.env.END_REVISION = '';
+        process.env.COMMIT_HASH_BEGIN = '';
+        process.env.COMMIT_HASH_END = '';
         process.env.GITLAB_URL = '';
         process.env.GITLAB_PROJECT_ID = '';
         process.env.GITLAB_TOKEN = '';
         process.env.GITLAB_BRANCH = '';
         process.env.BUILD_URL = '';
     });
-    describe('getBeginRevision()', () => {
+    describe('getCommitHashBegin()', () => {
         it('環境変数がセットされていない場合', () => {
-            assert.throws(() => Env.getBeginRevision(), (error: any) => {
-                assert(error.message === 'BEGIN_REVISION is not defined.');
+            assert.throws(() => Env.getCommitHashBegin(), (error: any) => {
+                assert(error.message === 'COMMIT_HASH_BEGIN is not defined.');
                 return true;
             });
         });
         it('環境変数がセットされている場合', () => {
             // prepare
-            process.env.BEGIN_REVISION = 'begin-revision';
+            process.env.COMMIT_HASH_BEGIN = 'commit-hash-begin';
 
             // test
-            assert(Env.getBeginRevision() === 'begin-revision');
+            assert(Env.getCommitHashBegin() === 'commit-hash-begin');
         });
     });
-    describe('getEndRevision()', () => {
+    describe('getCommitHashEnd()', () => {
         it('環境変数がセットされていない場合', () => {
-            assert.throws(() => Env.getEndRevision(), (error: any) => {
-                assert(error.message === 'END_REVISION is not defined.');
+            assert.throws(() => Env.getCommitHashEnd(), (error: any) => {
+                assert(error.message === 'COMMIT_HASH_END is not defined.');
                 return true;
             });
         });
         it('環境変数がセットされている場合', () => {
             // prepare
-            process.env.END_REVISION = 'end-revision';
+            process.env.COMMIT_HASH_END = 'commit-hash-end';
 
             // test
-            assert(Env.getEndRevision() === 'end-revision');
+            assert(Env.getCommitHashEnd() === 'commit-hash-end');
         });
     });
     describe('getGitLabUrl()', () => {

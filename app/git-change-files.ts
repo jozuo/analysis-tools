@@ -9,9 +9,9 @@ import { GitCommand } from './git/repository/git-command';
 import * as fs from 'fs';
 import * as path from 'path';
 
-function outputFileRevisions(files: ChangeFile[], dir: string): void {
+function outputCommitHashFile(files: ChangeFile[], dir: string): void {
     const data = files.map((file) => {
-        return `${file.getName()},${file.getRevision()}`;
+        return `${file.getName()},${file.getCommitHash()}`;
     }).reduce((prev, current) => {
         return `${prev}\n${current}`;
     });
@@ -26,4 +26,4 @@ const sourcePath = process.argv[2];
 const destPath = process.argv[3];
 
 const changeFiles = new ChangeFileList(new GitCommand(sourcePath)).getFiles();
-outputFileRevisions(changeFiles, destPath);
+outputCommitHashFile(changeFiles, destPath);
