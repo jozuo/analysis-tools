@@ -1,15 +1,15 @@
 // --- public
 def init() {
     initTool()
-	setupEnvironment()
+    setupEnvironment()
     changeGitLabStatus('running', 'jenkinsジョブ実行中') 
 }
 
 def preProcess() {
     cloneSource()
     resolveCommitHashBegin()
-	// debugEnvironment()
-	resolveDiffFiles()
+    // debugEnvironment()
+    resolveDiffFiles()
 }
 
 def postProcess(commentFilePath) {
@@ -25,19 +25,19 @@ def errorProcess() {
 // --- private
 
 def changeGitLabStatus(status, description=null, coverage=null) {
-    docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
-        sh """
-            ${env.PROXY_SETTING}
-            cd node-tool
-            yarn run gitlab-commit-status ${status} ${description} ${coverage}
-        """
-    }
+    // docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+    //     sh """
+    //         ${env.PROXY_SETTING}
+    //         cd node-tool
+    //         yarn run gitlab-commit-status ${status} ${description} ${coverage}
+    //     """
+    // }
 }
 
 def commentToGitLab(commentFilePath) {
     docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
         sh """
-            ${env.PROXY_SETTING}
+            
             cd node-tool
             yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${commentFilePath}\"
         """
@@ -57,14 +57,14 @@ def resolveDiffFiles() {
 def debugEnvironment() {
     echo "GITLAB_CREDENTIAL_TOOL: ${env.GITLAB_CREDENTIAL_TOOL}"
     echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
-	echo "GITLAB_TOKEN: ${env.GITLAB_TOKEN}"
-	echo "GITLAB_URL: ${env.GITLAB_URL}"
-	echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
-	echo "GITLAB_BRANCH: ${env.GITLAB_BRANCH}"
-	echo "COMMIT_HASH_BEGIN: ${env.COMMIT_HASH_BEGIN}"
-	echo "COMMIT_HASH_END: ${env.COMMIT_HASH_END}"
-	echo "BUILD_URL: ${env.BUILD_URL}"
-	echo "DEBUG: ${env.DEBUG}"
+    echo "GITLAB_TOKEN: ${env.GITLAB_TOKEN}"
+    echo "GITLAB_URL: ${env.GITLAB_URL}"
+    echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
+    echo "GITLAB_BRANCH: ${env.GITLAB_BRANCH}"
+    echo "COMMIT_HASH_BEGIN: ${env.COMMIT_HASH_BEGIN}"
+    echo "COMMIT_HASH_END: ${env.COMMIT_HASH_END}"
+    echo "BUILD_URL: ${env.BUILD_URL}"
+    echo "DEBUG: ${env.DEBUG}"
 }
 
 def setupEnvironment() {
@@ -104,14 +104,14 @@ def initTool() {
 
 def resolveCommitHashBegin() {
     dir('source') {
-	    if  ("${env.gitLabBefore}" ==~ /^0+$/)  {
+        if  ("${env.gitLabBefore}" ==~ /^0+$/)  {
             def stdout = sh returnStdout: true, script:
                 '''
-                  git show-branch -a | \
-                  grep \'*\' | \
-                  grep -v "$(git rev-parse --abbrev-ref HEAD)" | \
-                  head -1 | \
-                  awk -F\'[]~^[]\' \'{print $2}\'
+                    git show-branch -a | \
+                        grep \'*\' | \
+                        grep -v "$(git rev-parse --abbrev-ref HEAD)" | \
+                        head -1 | \
+                        awk -F\'[]~^[]\' \'{print $2}\'
                 '''
             env.COMMIT_HASH_BEGIN = stdout.trim()
         } else { 
@@ -119,6 +119,5 @@ def resolveCommitHashBegin() {
         }
     }
 }
-
 
 return this

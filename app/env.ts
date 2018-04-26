@@ -3,7 +3,7 @@ import * as path from 'path';
 export class Env {
     public static getCommitHashBegin(): string {
         if (!process.env.COMMIT_HASH_BEGIN) {
-            throw new Error('BEGIN_COMMIT_HASH is not defined.');
+            throw new Error('COMMIT_HASH_BEGIN is not defined.');
         }
         return process.env.COMMIT_HASH_BEGIN;
     }

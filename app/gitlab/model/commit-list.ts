@@ -30,12 +30,10 @@ export class CommitList {
     }
 
     private getCommit(commitHash: string): Commit | undefined {
-        this.commits.forEach((commit) => {
-            if (commit.getHash() === commitHash) {
-                return commit;
-            }
+        const results = this.commits.filter((commit) => {
+            return (commit.getHash() === commitHash);
         });
-        return undefined;
+        return (results.length > 0) ? results[0] : undefined;
     }
 
     private checkAlreadyExist(filePath: string): void {

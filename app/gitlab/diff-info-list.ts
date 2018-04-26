@@ -7,12 +7,6 @@ export class DiffInfoList {
         this.diffInfos = diffInfos;
     }
 
-    public getDiffInfo(filePath: string): DiffInfo {
-        return this.diffInfos.filter((diffInfo) => {
-            return diffInfo.getFilePath() === filePath;
-        })[0];
-    }
-
     public isModifiedLine(filePath: string, lineNo: number): boolean {
         return this.diffInfos.filter((diff) => {
             return diff.getFilePath() === filePath;

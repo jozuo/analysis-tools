@@ -1,6 +1,8 @@
+import { ChangeFileList } from './git/model/change-file-list';
 import { CommitList } from './gitlab/model/commit-list';
 import * as request from 'request-promise-native';
 import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
+import { GitCommand } from './git/repository/git-command';
 
 const HOST = 'localhost';
 
@@ -9,12 +11,16 @@ describe('GitLabコミットコメントのテスト', () => {
         process.env.GITLAB_URL = `http://gitlab/toru/professional-tool`;
         process.env.GITLAB_PROJECT_ID = '1';
         process.env.GITLAB_TOKEN = 'r25vP4p9iRJg_ei7XqSg';
-        process.env.COMMIT_HASH_END = 'ea65c6fe70564ef93d16424302f6b30b86091e94';
+        process.env.COMMIT_HASH_BEGIN = 'origin/develop';
+        process.env.COMMIT_HASH_END = '412bb9e9eb00f674d60d9403bcdb81dd017b0c2a';
         process.env.GITLAB_BRANCH = 'test';
         process.env.BUILD_URL = 'http://localhost:8080/job/pro-tool-analysis/111/';
     });
+    it('差分抽出', () => {
+        const changeFiles = new ChangeFileList(new GitCommand('/Users/toru/work/professional-tool')).getFiles();
+    });
     it.only('テスト実行', async () => {
-        const target = new CommitList('./test/gitlab/tslint-result.csv');
+        const target = new CommitList('/Users/toru/work/issues.csv');
         await target.postComment();
     });
     it('diffの解析', () => {

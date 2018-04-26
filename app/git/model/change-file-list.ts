@@ -38,7 +38,7 @@ export class ChangeFileList {
         if (file.getStatus() === 'D') {
             return;
         }
-        if (this.names.indexOf(file.getName()) > 0) {
+        if (this.names.indexOf(file.getName()) >= 0) {
             return;
         }
         this.files.push(file);
