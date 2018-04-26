@@ -1,5 +1,5 @@
+import { DiffInfoList } from './../model/diff-info-list';
 import { Commit } from './../model/commit';
-import { DiffInfoList } from './../diff-info-list';
 import { RequestWrapper } from './request-wrapper';
 import { DiffInfo, DiffInfoBuilder } from './../model/diff-info';
 import { Env } from './../../env';

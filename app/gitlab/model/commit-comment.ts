@@ -1,4 +1,4 @@
-import { DiffInfoList } from './../diff-info-list';
+import { DiffInfoList } from './diff-info-list';
 import { Env } from './../../env';
 import { DiffInfo } from './diff-info';
 import { Commit } from './commit';

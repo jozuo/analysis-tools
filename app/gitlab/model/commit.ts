@@ -1,4 +1,4 @@
-import { DiffInfoList } from './../diff-info-list';
+import { DiffInfoList } from './diff-info-list';
 import { CommitCommentRepository } from './../repository/commit-comment-repository';
 import { CommitComment } from './commit-comment';
 

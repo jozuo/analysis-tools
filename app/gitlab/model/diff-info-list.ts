@@ -1,4 +1,4 @@
-import { DiffInfo } from './model/diff-info';
+import { DiffInfo } from './diff-info';
 export class DiffInfoList {
 
     private diffInfos: DiffInfo[];

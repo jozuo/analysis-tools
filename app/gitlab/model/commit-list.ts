@@ -7,6 +7,9 @@ export class CommitList {
     private filePaths: string[] = [];
 
     constructor(commentFilePath: string) {
+        console.log('--- debug ---');
+        console.log(`file: ${commentFilePath}`);
+        console.log('--- debug ---');
         const lines = fs.readFileSync(commentFilePath, 'UTF-8').split('\n');
         lines.filter((line) => {
             return line.trim().length > 0;
