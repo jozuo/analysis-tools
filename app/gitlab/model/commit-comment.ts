@@ -55,8 +55,7 @@ export class CommitComment {
         return `1. [${this.getLevelIcon()}${this.getContents()}](${this.getGitLabBlobUrl()})${this.getRuleLink()}`;
     }
 
-    /** visible for testing */
-    public getGitLabBlobUrl(): string {
+    private getGitLabBlobUrl(): string {
         return Env.getGitLabUrl()
             + path.join(
                 '/blob',
