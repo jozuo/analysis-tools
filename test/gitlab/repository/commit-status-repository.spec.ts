@@ -16,7 +16,7 @@ describe('CommitStatusRepository', () => {
             process.env.GITLAB_URL = 'http://localhost/toru/project';
             process.env.GITLAB_PROJECT_ID = 'id';
             process.env.GITLAB_TOKEN = 'token';
-            process.env.END_REVISION = 'end-revision';
+            process.env.COMMIT_HASH_END = 'commit-hash-end';
             process.env.GITLAB_BRANCH = 'branch';
             process.env.BUILD_URL = 'http://jenkins:8080/job/5';
         });
@@ -35,7 +35,7 @@ describe('CommitStatusRepository', () => {
             // verify
             verify(mocked.post(anything())).once();
             const options = capture(mocked.post).last()[0];
-            assert(options.uri === 'http://localhost/api/v4/projects/id/statuses/end-revision');
+            assert(options.uri === 'http://localhost/api/v4/projects/id/statuses/commit-hash-end');
             assert(options.proxy === undefined);
             assert(JSON.stringify(options.headers) === '{"PRIVATE-TOKEN":"token"}');
             assert(options.form.state === 'running');
@@ -60,7 +60,7 @@ describe('CommitStatusRepository', () => {
             // verify
             verify(mocked.post(anything())).once();
             const options = capture(mocked.post).last()[0];
-            assert(options.uri === 'http://localhost/api/v4/projects/id/statuses/end-revision');
+            assert(options.uri === 'http://localhost/api/v4/projects/id/statuses/commit-hash-end');
             assert(options.proxy === undefined);
             assert(JSON.stringify(options.headers) === '{"PRIVATE-TOKEN":"token"}');
             assert(options.form.state === 'running');
