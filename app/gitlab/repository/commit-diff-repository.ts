@@ -1,10 +1,9 @@
-import { DiffInfoList } from './../model/diff-info-list';
-import { Commit } from './../model/commit';
-import { RequestWrapper } from './request-wrapper';
-import { DiffInfo, DiffInfoBuilder } from './../model/diff-info';
-import { Env } from './../../env';
-import { AbstractRepository } from './abstract-repository';
 import * as path from 'path';
+import { Env } from './../../env';
+import { DiffInfoBuilder } from './../model/diff-info';
+import { DiffInfoList } from './../model/diff-info-list';
+import { AbstractRepository } from './abstract-repository';
+import { RequestWrapper } from './request-wrapper';
 
 const INTERVAL_MILL_SEC = 200;
 

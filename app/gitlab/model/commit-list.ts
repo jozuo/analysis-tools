@@ -1,6 +1,6 @@
+import * as fs from 'fs';
 import { CommitDiffRepository } from './../repository/commit-diff-repository';
 import { Commit } from './commit';
-import * as fs from 'fs';
 
 export class CommitList {
     private commits: Commit[] = [];

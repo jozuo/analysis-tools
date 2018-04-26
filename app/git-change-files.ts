@@ -3,11 +3,11 @@
  *   arg1: workspace path
  *   arg2: dest path
  */
+import * as fs from 'fs';
+import * as path from 'path';
 import { ChangeFile } from './git/model/change-file';
 import { ChangeFileList } from './git/model/change-file-list';
 import { GitCommand } from './git/repository/git-command';
-import * as fs from 'fs';
-import * as path from 'path';
 
 function outputCommitHashFile(files: ChangeFile[], dir: string): void {
     const data = files.map((file) => {

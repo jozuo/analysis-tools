@@ -1,7 +1,7 @@
-import { mock, when, anything, instance, verify, capture } from 'ts-mockito/lib/ts-mockito';
-import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
-import { CommitStatusRepository } from './../../../app/gitlab/repository/commit-status-repository';
 import * as assert from 'assert';
+import { anything, capture, instance, mock, verify, when } from 'ts-mockito/lib/ts-mockito';
+import { CommitStatusRepository } from './../../../app/gitlab/repository/commit-status-repository';
+import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
 
 describe('CommitStatusRepository', () => {
     let repository: CommitStatusRepository;

@@ -1,9 +1,8 @@
-import { ChangeFileList } from './../../app/git/model/change-file-list';
-import { ChangeFile } from './../../app/git/model/change-file';
-import { capture } from 'ts-mockito/lib/ts-mockito';
-import { mock, instance, reset, when, anyString } from 'ts-mockito';
-import { GitCommand } from '../../app/git/repository/git-command';
 import * as assert from 'assert';
+import { instance, mock, reset, when } from 'ts-mockito';
+import { GitCommand } from '../../app/git/repository/git-command';
+import { ChangeFile } from './../../app/git/model/change-file';
+import { ChangeFileList } from './../../app/git/model/change-file-list';
 
 describe('ChangeFileResolver', () => {
     let mockCommand: GitCommand;

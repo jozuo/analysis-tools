@@ -1,6 +1,6 @@
+import { Env } from '../../env';
 import { GitCommand } from './../repository/git-command';
 import { ChangeFile } from './change-file';
-import { Env } from '../../env';
 
 export class ChangeFileList {
     private names: string[] = [];

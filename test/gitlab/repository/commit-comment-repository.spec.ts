@@ -1,9 +1,9 @@
+import * as assert from 'assert';
+import { anyNumber, anyString, anything, capture, instance, mock, spy, verify, when } from 'ts-mockito';
 import { Commit } from './../../../app/gitlab/model/commit';
-import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
 import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
-import { spy, when, anyString, anyNumber, verify, anything, mock, instance, capture } from 'ts-mockito';
-import * as assert from 'assert';
+import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
 
 describe('CommitCommentRepository', () => {
     let repository: CommitCommentRepository;

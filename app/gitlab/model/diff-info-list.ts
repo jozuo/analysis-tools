@@ -1,6 +1,6 @@
 import { DiffInfo } from './diff-info';
-export class DiffInfoList {
 
+export class DiffInfoList {
     private diffInfos: DiffInfo[];
 
     constructor(diffInfos: DiffInfo[]) {

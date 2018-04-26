@@ -1,7 +1,7 @@
-import { Env } from './../../env';
-import { RequestWrapper } from './request-wrapper';
-import { AbstractRepository } from './abstract-repository';
 import * as path from 'path';
+import { Env } from './../../env';
+import { AbstractRepository } from './abstract-repository';
+import { RequestWrapper } from './request-wrapper';
 
 const INTERVAL_MILLI_SEC = 200;
 

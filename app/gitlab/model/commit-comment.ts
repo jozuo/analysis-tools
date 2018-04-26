@@ -1,9 +1,7 @@
-import { DiffInfoList } from './diff-info-list';
-import { Env } from './../../env';
-import { DiffInfo } from './diff-info';
-import { Commit } from './commit';
-import * as request from 'request-promise-native';
 import * as path from 'path';
+import { Env } from './../../env';
+import { Commit } from './commit';
+import { DiffInfoList } from './diff-info-list';
 
 export class CommitComment {
     private commit: Commit;

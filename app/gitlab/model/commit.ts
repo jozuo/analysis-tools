@@ -1,6 +1,6 @@
-import { DiffInfoList } from './diff-info-list';
 import { CommitCommentRepository } from './../repository/commit-comment-repository';
 import { CommitComment } from './commit-comment';
+import { DiffInfoList } from './diff-info-list';
 
 export class Commit {
     private hash: string;

@@ -1,8 +1,8 @@
-import { ChangeFileList } from './git/model/change-file-list';
-import { CommitList } from './gitlab/model/commit-list';
 import * as request from 'request-promise-native';
-import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
+import { ChangeFileList } from './git/model/change-file-list';
 import { GitCommand } from './git/repository/git-command';
+import { CommitList } from './gitlab/model/commit-list';
+import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
 
 const HOST = 'localhost';
 

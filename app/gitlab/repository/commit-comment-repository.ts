@@ -1,9 +1,9 @@
-import { RequestWrapper } from './request-wrapper';
-import { CommitComment } from './../model/commit-comment';
-import { Commit } from './../model/commit';
-import { Env } from './../../env';
-import { AbstractRepository } from './abstract-repository';
 import * as path from 'path';
+import { Env } from './../../env';
+import { Commit } from './../model/commit';
+import { CommitComment } from './../model/commit-comment';
+import { AbstractRepository } from './abstract-repository';
+import { RequestWrapper } from './request-wrapper';
 
 const INTERVAL_MILLI_SEC = 200;
 
