@@ -39,7 +39,7 @@ def commentToGitLab(commentFilePath) {
         sh """
             
             cd node-tool
-            yarn run gitlab-comment \"${env.WORKSPACE}/diff-file-revision.txt\" \"${commentFilePath}\"
+            yarn run gitlab-comment ${commentFilePath}
         """
     }
 }
