@@ -10,7 +10,7 @@ export class CommitList {
         lines.filter((line) => {
             return line.trim().length > 0;
         }).forEach((line, index) => {
-            const commitHash = line.split(',')[0];
+            const commitHash = this.getCommitHash(line);
             let commit = this.getCommit(commitHash);
             if (!commit) {
                 commit = new Commit(commitHash);
@@ -35,7 +35,7 @@ export class CommitList {
         return (results.length > 0) ? results[0] : undefined;
     }
 
-    private getFilePath(line: string): string {
+    private getCommitHash(line: string): string {
         return line.split(',')[0].replace(/^"/, '').replace(/"$/, '');
     }
 }
