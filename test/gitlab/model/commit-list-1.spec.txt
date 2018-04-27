@@ -1,0 +1,4 @@
+commit-hash1,app/hoge.ts,10,comment1
+commit-hash1,app/bar.ts,13,comment4
+commit-hash2,app/page.ts,11,comment2
+commit-hash2,app/foo.ts,12,comment3
