@@ -25,10 +25,6 @@ export class Commit {
         this.commitComments.push(new CommitComment(this, line));
     }
 
-    public compareTo(other: Commit) {
-        const result = this.hash.localeCompare(other.getHash());
-    }
-
     public getSummaryMessage(): string | undefined {
         const extraComments = this.commitComments
             .filter((commitComment) => {

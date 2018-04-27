@@ -1,65 +1,38 @@
-import { DiffInfoBuilder, DiffInfo } from './../../../app/gitlab/model/diff-info';
-import { Range } from './../../../app/gitlab/model/range';
-import { CommitComment } from './../../../app/gitlab/model/commit-comment';
-import { Commit } from './../../../app/gitlab/model/commit-file';
-import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
-import { mock, instance, when, anything, verify, deepEqual, capture, reset } from 'ts-mockito/lib/ts-mockito';
 import * as assert from 'assert';
+import { anything, capture, instance, mock, verify, when } from 'ts-mockito/lib/ts-mockito';
+import { Commit } from '../../../app/gitlab/model/commit';
+import { DiffInfoList } from '../../../app/gitlab/model/diff-info-list';
+import { CommitComment } from './../../../app/gitlab/model/commit-comment';
+import { DiffInfo, DiffInfoBuilder } from './../../../app/gitlab/model/diff-info';
+import { Range } from './../../../app/gitlab/model/range';
+import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
 
-describe('CommentFile', () => {
-    let commitFile: Commit;
+describe('Comment', () => {
+    let commit: Commit;
     before(() => {
-        commitFile = new Commit('path string', 'revision string');
+        commit = new Commit('commit hash string');
     });
     describe('Getter', () => {
-        it('getPath()', () => {
-            assert(commitFile.getPath() === 'path string');
-        });
-        it('getRevision()', () => {
-            assert(commitFile.getHash() === 'revision string');
-        });
-    });
-    describe('isSamePath()', () => {
-        it('pathが異なる場合', () => {
-            assert(commitFile.isSamePath('hoge') === false);
-        });
-        it('pathが同じ場合', () => {
-            assert(commitFile.isSamePath('path string') === true);
+        it('getHash()', () => {
+            assert(commit.getHash() === 'commit hash string');
         });
     });
     describe('add()', () => {
         it('要素が追加された場合', () => {
-            assert((commitFile as any).commitComments.length === 0);
+            assert((commit as any).commitComments.length === 0);
 
-            commitFile.add('"file path", 123, "comment message"');
-            assert((commitFile as any).commitComments.length === 1);
+            commit.add('"commit-hash","file path", 123, "comment message"');
+            assert((commit as any).commitComments.length === 1);
 
-            commitFile.add('"file path", 123, "comment message"');
-            assert((commitFile as any).commitComments.length === 2);
-        });
-    });
-    describe('compareTo()', () => {
-        it('revisonが異なる場合', () => {
-            const obj1 = new Commit('hoge', 'page');
-            const obj2 = new Commit('foo', 'bar');
-            assert(obj1.compareTo(obj2) === 1);
-            assert(obj2.compareTo(obj1) === -1);
-        });
-        it('revisionが同じ場合', () => {
-            const obj1 = new Commit('page', 'hoge');
-            const obj2 = new Commit('foo', 'hoge');
-            assert(obj1.compareTo(obj2) === 1);
-            assert(obj2.compareTo(obj1) === -1);
+            commit.add('"commit-hash","file path", 123, "comment message"');
+            assert((commit as any).commitComments.length === 2);
         });
     });
     describe('getSummaryMessage()', () => {
         let commitComments: CommitComment[];
         beforeEach(() => {
             const diffInfo = new DiffInfoTestBuilder('path', [new Range(10, 20)]).build();
-            commitFile.setDiffInfo(diffInfo);
-        });
-        afterEach(() => {
-            // commitComments.forEach((commitComment) => reset(commitComment));
+            commit.setDiffInfoList(new DiffInfoList(([diffInfo])));
         });
         it('summaryMessageが存在する場合', () => {
             // prepare
@@ -69,7 +42,7 @@ describe('CommentFile', () => {
                 createCommitComment(true, 'message 3'),
                 createCommitComment(false, 'message 4'),
             ];
-            (commitFile as any).commitComments = commitComments;
+            (commit as any).commitComments = commitComments;
 
             let expected = `#### 2 extra issue\n`;
             expected += `\n`;
@@ -80,17 +53,17 @@ describe('CommentFile', () => {
             expected += `message 4`;
 
             // test
-            assert(commitFile.getSummaryMessage() === expected);
+            assert(commit.getSummaryMessage() === expected);
         });
         it('summaryMessageが存在しない場合', () => {
             // prepare
             commitComments = [
                 createCommitComment(true, 'message 1'),
             ];
-            (commitFile as any).commitComments = commitComments;
+            (commit as any).commitComments = commitComments;
 
             // test
-            assert(commitFile.getSummaryMessage() === undefined);
+            assert(commit.getSummaryMessage() === undefined);
         });
     });
     describe('postComment()', () => {
@@ -98,13 +71,13 @@ describe('CommentFile', () => {
         let mocked: CommitCommentRepository;
         beforeEach(() => {
             const diffInfo = new DiffInfoTestBuilder('path', [new Range(10, 20)]).build();
-            commitFile.setDiffInfo(diffInfo);
+            commit.setDiffInfoList(new DiffInfoList([diffInfo]));
 
             mocked = mock(CommitCommentRepository);
             const repository = instance(mocked);
             when(mocked.postIndividualComment(anything())).thenResolve(true);
             when(mocked.postSummaryComment(anything())).thenResolve(true);
-            (commitFile as any).repository = repository;
+            (commit as any).repository = repository;
         });
         it('IndividualMessageが存在する場合', async () => {
             // prepare
@@ -114,10 +87,10 @@ describe('CommentFile', () => {
                 createCommitComment(true, 'message 3'),
                 createCommitComment(false, 'message 4'),
             ];
-            (commitFile as any).commitComments = commitComments;
+            (commit as any).commitComments = commitComments;
 
             // test
-            assert(await commitFile.postComment() === true);
+            assert(await commit.postComment() === true);
 
             // verify
             // - CommitCommentRepository#postIndividualComment()
@@ -126,24 +99,24 @@ describe('CommentFile', () => {
             assert(capture(mocked.postIndividualComment).second()[0].getSummaryMessage() === 'message 3');
 
             // - CommitCommentRepository#postSummaryComment()
-            verify(mocked.postSummaryComment(commitFile)).once();
+            verify(mocked.postSummaryComment(commit)).once();
         });
         it('IndividualMessageが存在しない場合', async () => {
             // prepare
             commitComments = [
                 createCommitComment(false, 'message 1'),
             ];
-            (commitFile as any).commitComments = commitComments;
+            (commit as any).commitComments = commitComments;
 
             // test
-            assert(await commitFile.postComment() === true);
+            assert(await commit.postComment() === true);
 
             // verify
             // - CommitCommentRepository#postIndividualComment()
             verify(mocked.postIndividualComment(anything())).never();
 
             // - CommitCommentRepository#postSummaryComment()
-            verify(mocked.postSummaryComment(commitFile)).once();
+            verify(mocked.postSummaryComment(commit)).once();
         });
     });
 
