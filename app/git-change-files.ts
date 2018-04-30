@@ -3,24 +3,15 @@
  *   arg1: workspace path
  *   arg2: dest path
  */
+import * as fs from 'fs';
+import * as path from 'path';
 import { ChangeFile } from './git/model/change-file';
 import { ChangeFileList } from './git/model/change-file-list';
 import { GitCommand } from './git/repository/git-command';
-import * as fs from 'fs';
-import * as path from 'path';
 
-function outputFiles(files: ChangeFile[], dir: string): void {
+function outputCommitHashFile(files: ChangeFile[], dir: string): void {
     const data = files.map((file) => {
-        return file.getName();
-    }).reduce((prev, current) => {
-        return `${prev}\n${current}`;
-    });
-    fs.writeFileSync(path.join(dir, './diff-file.txt'), data);
-}
-
-function outputFileRevisions(files: ChangeFile[], dir: string): void {
-    const data = files.map((file) => {
-        return `${file.getName()},${file.getRevision()}`;
+        return `${file.getName()},${file.getCommitHash()}`;
     }).reduce((prev, current) => {
         return `${prev}\n${current}`;
     });
@@ -35,5 +26,4 @@ const sourcePath = process.argv[2];
 const destPath = process.argv[3];
 
 const changeFiles = new ChangeFileList(new GitCommand(sourcePath)).getFiles();
-outputFiles(changeFiles, destPath);
-outputFileRevisions(changeFiles, destPath);
+outputCommitHashFile(changeFiles, destPath);

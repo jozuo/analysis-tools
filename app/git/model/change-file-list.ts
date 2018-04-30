@@ -1,6 +1,6 @@
+import { Env } from '../../env';
 import { GitCommand } from './../repository/git-command';
 import { ChangeFile } from './change-file';
-import { Env } from '../../env';
 
 export class ChangeFileList {
     private names: string[] = [];
@@ -10,24 +10,24 @@ export class ChangeFileList {
     constructor(gitCommand: GitCommand) {
         this.gitCommand = gitCommand;
 
-        const revisions = this.gitCommand.getRevisions(
-            Env.getBeginRevision(), Env.getEndRevision());
-        this.resolve(revisions);
+        const commitHashes = this.gitCommand.getCommits(
+            Env.getCommitHashBegin(), Env.getCommitHashEnd());
+        this.resolve(commitHashes);
     }
 
     public getFiles(): ChangeFile[] {
         return this.files;
     }
 
-    private resolve(revisions: string[]): void {
-        revisions.forEach((revision, index) => {
-            const from = (index === revisions.length - 1) ? Env.getBeginRevision() : revisions[index + 1];
-            const lines = this.gitCommand.getDiffFiles(from, revision);
+    private resolve(commitHashes: string[]): void {
+        commitHashes.forEach((commitHash, index) => {
+            const from = (index === commitHashes.length - 1) ? Env.getCommitHashBegin() : commitHashes[index + 1];
+            const lines = this.gitCommand.getDiffFiles(from, commitHash);
 
             lines.filter((line) => {
                 return line.trim().length > 0;
             }).map((line) => {
-                return new ChangeFile(revision, line.split('\t')[1].trim(), line.split('\t')[0].trim());
+                return new ChangeFile(commitHash, line.split('\t')[1].trim(), line.split('\t')[0].trim());
             }).forEach((file) => {
                 this.add(file);
             });
@@ -38,7 +38,7 @@ export class ChangeFileList {
         if (file.getStatus() === 'D') {
             return;
         }
-        if (this.names.indexOf(file.getName()) > 0) {
+        if (this.names.indexOf(file.getName()) >= 0) {
             return;
         }
         this.files.push(file);

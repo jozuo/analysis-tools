@@ -1,5 +1,7 @@
-import { CommitCommentRequester } from './gitlab/commit-comment-requester';
 import * as request from 'request-promise-native';
+import { ChangeFileList } from './git/model/change-file-list';
+import { GitCommand } from './git/repository/git-command';
+import { CommitList } from './gitlab/model/commit-list';
 import { CommitStatusRepository } from './gitlab/repository/commit-status-repository';
 
 const HOST = 'localhost';
@@ -9,20 +11,24 @@ describe('GitLabコミットコメントのテスト', () => {
         process.env.GITLAB_URL = `http://gitlab/toru/professional-tool`;
         process.env.GITLAB_PROJECT_ID = '1';
         process.env.GITLAB_TOKEN = 'r25vP4p9iRJg_ei7XqSg';
-        process.env.END_REVISION = 'ea65c6fe70564ef93d16424302f6b30b86091e94';
+        process.env.COMMIT_HASH_BEGIN = 'origin/develop';
+        process.env.COMMIT_HASH_END = '412bb9e9eb00f674d60d9403bcdb81dd017b0c2a';
         process.env.GITLAB_BRANCH = 'test';
         process.env.BUILD_URL = 'http://localhost:8080/job/pro-tool-analysis/111/';
     });
-    it('テスト実行', async () => {
-        const target = new CommitCommentRequester('./test/gitlab/file-revision.txt');
-        await target.postComment('./test/gitlab/tslint-result.csv');
+    it('差分抽出', () => {
+        const changeFiles = new ChangeFileList(new GitCommand('/Users/toru/work/professional-tool')).getFiles();
+    });
+    it.only('テスト実行', async () => {
+        const target = new CommitList('/Users/toru/work/issues.csv');
+        await target.postComment();
     });
     it('diffの解析', () => {
-        const revision = 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd';
+        const commitHash = 'c59d1508e8876e7c91c9d3fb0465c67b50c665fd';
         const token = 'tV6o8iYtFpKqFcTp9L_m';
         const options = {
             method: 'GET',
-            uri: `http://${HOST}/api/v4/projects/2/repository/commits/${revision}/diff`,
+            uri: `http://${HOST}/api/v4/projects/2/repository/commits/${commitHash}/diff`,
             proxy: process.env.PROXY || undefined,
             headers: {
                 'PRIVATE-TOKEN': token,

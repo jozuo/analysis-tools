@@ -1,53 +1,34 @@
 import { CommitCommentRepository } from './../repository/commit-comment-repository';
-import { DiffInfo } from './diff-info';
 import { CommitComment } from './commit-comment';
+import { DiffInfoList } from './diff-info-list';
 
-export class CommitFile {
-    private path: string;
-    private revision: string;
+export class Commit {
+    private hash: string;
     private commitComments: CommitComment[] = [];
-    private diffInfo?: DiffInfo;
+    private diffInfoList?: DiffInfoList;
     private repository = new CommitCommentRepository();
 
-    constructor(path: string, revision: string) {
-        this.path = path;
-        this.revision = revision;
+    constructor(hash: string) {
+        this.hash = hash;
     }
 
     // 本当はコンストラクタで設定したいが、コンストラクタで非同期処理のレスポンスを
     // 利用する方法が分からないので、やむを得ずsetterを利用
-    public setDiffInfo(diffInfo: DiffInfo): void {
-        this.diffInfo = diffInfo;
+    public setDiffInfoList(diffInfoList: DiffInfoList): void {
+        this.diffInfoList = diffInfoList;
     }
 
-    public getPath(): string {
-        return this.path;
+    public getHash(): string {
+        return this.hash;
     }
-
-    public getRevision(): string {
-        return this.revision;
-    }
-
-    public isSamePath(path: string): boolean {
-        return this.path === path;
-    }
-
     public add(line: string): void {
         this.commitComments.push(new CommitComment(this, line));
-    }
-
-    public compareTo(other: CommitFile) {
-        const result = this.revision.localeCompare(other.getRevision());
-        if (result !== 0) {
-            return result;
-        }
-        return this.path.localeCompare(other.getPath());
     }
 
     public getSummaryMessage(): string | undefined {
         const extraComments = this.commitComments
             .filter((commitComment) => {
-                return !commitComment.isInModifiedLine(this.getDiffIInfo());
+                return !commitComment.isInModifiedLine(this.getDiffIInfoList());
             });
 
         const count = extraComments.length;
@@ -69,22 +50,22 @@ export class CommitFile {
     }
 
     public async postComment(): Promise<boolean> {
-        await this.postIndividualComment(this.getDiffIInfo());
+        await this.postIndividualComment(this.getDiffIInfoList());
         await this.repository.postSummaryComment(this);
         return true;
     }
 
-    private getDiffIInfo(): DiffInfo {
-        if (!this.diffInfo) {
-            throw Error('diff info is not define.');
+    private getDiffIInfoList(): DiffInfoList {
+        if (!this.diffInfoList) {
+            throw Error('diff info list is not define.');
         }
-        return this.diffInfo;
+        return this.diffInfoList;
     }
 
-    private async postIndividualComment(diffInfo: DiffInfo): Promise<void> {
+    private async postIndividualComment(diffInfoList: DiffInfoList): Promise<void> {
         const individualComments = this.commitComments
             .filter((commitComment) => {
-                return commitComment.isInModifiedLine(diffInfo);
+                return commitComment.isInModifiedLine(diffInfoList);
             });
         for (const individualComment of individualComments) {
             await this.repository.postIndividualComment(individualComment);

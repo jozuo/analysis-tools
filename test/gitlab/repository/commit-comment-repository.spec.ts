@@ -1,9 +1,9 @@
-import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
-import { CommitComment } from './../../../app/gitlab/model/commit-comment';
-import { CommitFile } from './../../../app/gitlab/model/commit-file';
-import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
-import { spy, when, anyString, anyNumber, verify, anything, mock, instance, capture } from 'ts-mockito';
 import * as assert from 'assert';
+import { anyNumber, anyString, anything, capture, instance, mock, spy, verify, when } from 'ts-mockito';
+import { Commit } from './../../../app/gitlab/model/commit';
+import { CommitComment } from './../../../app/gitlab/model/commit-comment';
+import { CommitCommentRepository } from './../../../app/gitlab/repository/commit-comment-repository';
+import { RequestWrapper } from './../../../app/gitlab/repository/request-wrapper';
 
 describe('CommitCommentRepository', () => {
     let repository: CommitCommentRepository;
@@ -12,10 +12,10 @@ describe('CommitCommentRepository', () => {
         repository = new CommitCommentRepository();
     });
     describe('postSummaryComment()', () => {
-        let commitFile: CommitFile;
+        let commitFile: Commit;
 
         beforeEach(() => {
-            commitFile = new CommitFile('path string', 'revision string');
+            commitFile = new Commit('commit hash string');
         });
         it('summaryCommentが無い場合', async () => {
             // prepare
@@ -34,7 +34,7 @@ describe('CommitCommentRepository', () => {
         it('送信成功の場合', async () => {
             // prepare
             const spied = spy<any>(repository);
-            when<string>(spied.post(anyString(), anyString(), anyString())).thenResolve('response');
+            when<string>(spied.post(anyString(), anyString())).thenResolve('response');
             const spiedCommitFile = spy(commitFile);
             when(spiedCommitFile.getSummaryMessage()).thenReturn('summary message');
 
@@ -42,12 +42,12 @@ describe('CommitCommentRepository', () => {
             assert(await repository.postSummaryComment(commitFile) === true);
 
             // verify
-            verify(spied.post('revision string', 'summary message', 'path string')).once();
+            verify(spied.post('commit hash string', 'summary message')).once();
         });
         it('送信失敗の場合', async () => {
             // prepare
             const spied = spy<any>(repository);
-            when<string>(spied.post(anyString(), anyString(), anyString())).thenReject('error message');
+            when<string>(spied.post(anyString(), anyString())).thenReject('error message');
             const spiedCommitFile = spy(commitFile);
             when(spiedCommitFile.getSummaryMessage()).thenReturn('summary message');
 
@@ -56,7 +56,7 @@ describe('CommitCommentRepository', () => {
             } catch (error) {
                 // test
                 assert(error === 'error message');
-                verify(spied.post('revision string', 'summary message', 'path string')).once();
+                verify(spied.post('commit hash string', 'summary message')).once();
             }
         });
     });
@@ -64,7 +64,7 @@ describe('CommitCommentRepository', () => {
         let commitComment: CommitComment;
 
         beforeEach(() => {
-            commitComment = new CommitComment(new CommitFile('path', 'revision'), ',123,message');
+            commitComment = new CommitComment(new Commit('commit hash'), 'commit hash,path,123,message');
             const spiedCommitComment = spy(commitComment);
             when(spiedCommitComment.getIndividualMessage()).thenReturn('individual message');
         });
@@ -77,7 +77,7 @@ describe('CommitCommentRepository', () => {
             assert(await repository.postIndividualComment(commitComment) === true);
 
             // verify
-            verify(spied.post('revision', 'individual message', 'path', 123)).once();
+            verify(spied.post('commit hash', 'individual message', 'path', 123)).once();
         });
         it('送信失敗の場合', async () => {
             // prepare
@@ -90,7 +90,7 @@ describe('CommitCommentRepository', () => {
             } catch (error) {
                 // test
                 assert(error === 'error message');
-                verify(spied.post('revision', 'individual message', 'path', 123)).once();
+                verify(spied.post('commit hash', 'individual message', 'path', 123)).once();
             }
         });
     });

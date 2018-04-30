@@ -1,5 +1,5 @@
-import { AbstractRepository } from '../../../app/gitlab/repository/abstract-repository';
 import * as assert from 'assert';
+import { AbstractRepository } from '../../../app/gitlab/repository/abstract-repository';
 
 describe('AbstractRepository', () => {
     let repository: AbstractRepository;

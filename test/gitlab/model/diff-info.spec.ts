@@ -1,14 +1,13 @@
-import { DiffInfoBuilder, DiffInfo } from './../../../app/gitlab/model/diff-info';
-import { Range } from '../../../app/gitlab/model/range';
-import * as fs from 'fs';
 import * as assert from 'assert';
+import { Range } from '../../../app/gitlab/model/range';
+import { DiffInfo, DiffInfoBuilder } from './../../../app/gitlab/model/diff-info';
 
 describe('DiffInfo', () => {
     let diffInfo: DiffInfo;
     describe('Getter', () => {
         it('getPath()', () => {
             diffInfo = new DiffInfoTestBuilder('path string', [new Range(11, 22)]).build();
-            assert(diffInfo.getPath() === 'path string');
+            assert(diffInfo.getFilePath() === 'path string');
         });
         it('getRange()', () => {
             diffInfo = new DiffInfoTestBuilder('path string', [new Range(11, 22)]).build();
@@ -30,7 +29,7 @@ describe('DiffInfo', () => {
     });
 
     class DiffInfoTestBuilder extends DiffInfoBuilder {
-        constructor(public path: string, public ranges: Range[]) {
+        constructor(public filePath: string, public ranges: Range[]) {
             super();
         }
         public build(): DiffInfo {

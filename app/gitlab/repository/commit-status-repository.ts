@@ -1,7 +1,7 @@
-import { Env } from './../../env';
-import { RequestWrapper } from './request-wrapper';
-import { AbstractRepository } from './abstract-repository';
 import * as path from 'path';
+import { Env } from './../../env';
+import { AbstractRepository } from './abstract-repository';
+import { RequestWrapper } from './request-wrapper';
 
 const INTERVAL_MILLI_SEC = 200;
 
@@ -13,10 +13,10 @@ export class CommitStatusRepository extends AbstractRepository {
             setTimeout(() => {
                 const endpoint = Env.getGitLabAPIEndPoint();
                 const token = Env.getGitLabToken();
-                const revision = Env.getEndRevision();
+                const commitHash = Env.getCommitHashEnd();
 
                 const options = {
-                    uri: endpoint + path.join('/statuses', revision),
+                    uri: endpoint + path.join('/statuses', commitHash),
                     proxy: process.env.PROXY || undefined,
                     headers: {
                         'PRIVATE-TOKEN': token,

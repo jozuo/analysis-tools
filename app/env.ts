@@ -1,18 +1,18 @@
 import * as path from 'path';
 
 export class Env {
-    public static getBeginRevision(): string {
-        if (!process.env.BEGIN_REVISION) {
-            throw new Error('BEGIN_REVISION is not defined.');
+    public static getCommitHashBegin(): string {
+        if (!process.env.COMMIT_HASH_BEGIN) {
+            throw new Error('COMMIT_HASH_BEGIN is not defined.');
         }
-        return process.env.BEGIN_REVISION;
+        return process.env.COMMIT_HASH_BEGIN;
     }
 
-    public static getEndRevision(): string {
-        if (!process.env.END_REVISION) {
-            throw new Error('END_REVISION is not defined.');
+    public static getCommitHashEnd(): string {
+        if (!process.env.COMMIT_HASH_END) {
+            throw new Error('COMMIT_HASH_END is not defined.');
         }
-        return process.env.END_REVISION;
+        return process.env.COMMIT_HASH_END;
     }
 
     public static getGitLabUrl(): string {

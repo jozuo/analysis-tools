@@ -1,19 +1,15 @@
 /**
  * gitlab-comment
- *   arg1: revision file path
  *   arg2: comment file path
  */
-import { CommitCommentRequester } from './gitlab/commit-comment-requester';
+import { CommitList } from './gitlab/model/commit-list';
 
-if (process.argv.length !== 4) {
+if (process.argv.length !== 3) {
     throw Error('Illegal arguments.');
 }
 
-const revisionFilePath = process.argv[2];
-const commentFilePath = process.argv[3];
-
-const target = new CommitCommentRequester(revisionFilePath);
-target.postComment(commentFilePath).then(() => {
+const commentFilePath = process.argv[2];
+new CommitList(commentFilePath).postComment().then(() => {
     console.log('done');
     process.exit(0);
 }).catch((error) => {
