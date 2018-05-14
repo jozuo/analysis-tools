@@ -8,7 +8,7 @@ def init() {
 def preProcess() {
     cloneSource()
     resolveCommitHashBegin()
-    // debugEnvironment()
+    debugEnvironment()
     resolveDiffFiles()
 }
 
@@ -25,19 +25,19 @@ def errorProcess() {
 // --- private
 
 def changeGitLabStatus(status, description=null, coverage=null) {
-    // docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
-    //     sh """
-    //         ${env.PROXY_SETTING}
-    //         cd node-tool
-    //         yarn run gitlab-commit-status ${status} ${description} ${coverage}
-    //     """
-    // }
+    docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+        sh """
+            ${env.PROXY_SETTING}
+            cd node-tool
+            yarn run gitlab-commit-status ${status} ${description} ${coverage}
+        """
+    }
 }
 
 def commentToGitLab(commentFilePath) {
     docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
         sh """
-            
+            ${env.PROXY_SETTING}
             cd node-tool
             yarn run gitlab-comment ${commentFilePath}
         """
@@ -74,8 +74,9 @@ def setupEnvironment() {
             passwordVariable: 'API_TOKEN',
             usernameVariable: 'API_USER')]) {
 
-        env.GITLAB_TOKEN = API_TOKEN
         env.GITLAB_URL = env.gitlabSourceRepoHomepage
+        env.GITLAB_TOKEN = API_TOKEN
+        env.GITLAB_BRANCH = "${env.gitlabSourceNamespace}/${env.gitlabSourceRepoName}"
         env.GITLAB_BRANCH = env.gitlabTargetBranch
         env.COMMIT_HASH_END = env.gitlabAfter
         env.DEBUG = true
