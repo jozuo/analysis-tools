@@ -56,7 +56,6 @@ def resolveDiffFiles() {
 
 def debugEnvironment() {
     echo "GITLAB_CREDENTIAL_TOOL: ${env.GITLAB_CREDENTIAL_TOOL}"
-    echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
     echo "GITLAB_TOKEN: ${env.GITLAB_TOKEN}"
     echo "GITLAB_URL: ${env.GITLAB_URL}"
     echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
