@@ -2,6 +2,7 @@
 def init() {
     initTool()
     setupEnvironment()
+    debugEnvironment()
     changeGitLabStatus('running', 'jenkinsジョブ実行中') 
 }
 
@@ -75,7 +76,7 @@ def setupEnvironment() {
 
         env.GITLAB_URL = env.gitlabSourceRepoHomepage
         env.GITLAB_TOKEN = API_TOKEN
-        env.GITLAB_PROJECT_ID= "${env.gitlabSourceNamespace}/${env.gitlabSourceRepoName}"
+        env.GITLAB_PROJECT_ID = "${env.gitlabSourceNamespace}/${env.gitlabSourceRepoName}"
         env.GITLAB_BRANCH = env.gitlabTargetBranch
         env.COMMIT_HASH_END = env.gitlabAfter
         env.DEBUG = true
