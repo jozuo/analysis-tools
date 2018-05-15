@@ -13,6 +13,7 @@
     "@types/mocha": "5.0.0",
     "@types/node": "9.6.4",
     "@types/request-promise-native": "1.0.14",
+    "@types/diff": "^3.5.1",
     "espower-typescript": "8.1.3",
     "mocha": "5.1.0",
     "nyc": "^11.6.0",
@@ -24,6 +25,7 @@
     "typescript": "2.8.1"
   },
   "dependencies": {
+    "diff": "^3.5.0",
     "request": "2.85.0",
     "request-promise-native": "1.0.5"
   },

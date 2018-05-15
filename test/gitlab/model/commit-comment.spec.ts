@@ -1,9 +1,8 @@
 import * as assert from 'assert';
+import { DiffInfoList } from '../../../app/gitlab/model/diff-info-list';
 import { Commit } from './../../../app/gitlab/model/commit';
 import { CommitComment } from './../../../app/gitlab/model/commit-comment';
 import { DiffInfo, DiffInfoBuilder } from './../../../app/gitlab/model/diff-info';
-import { Range } from './../../../app/gitlab/model/range';
-import { DiffInfoList } from '../../../app/gitlab/model/diff-info-list';
 
 describe('CommitComment', () => {
     let commit: Commit;
@@ -69,46 +68,25 @@ describe('CommitComment', () => {
         let diffInfoList: DiffInfoList;
 
         before(() => {
-            const ranges = [new Range(10, 20), new Range(30, 40)];
-            diffInfoList = new DiffInfoList([new DiffInfoTestBuilder('path string', ranges).build()]);
+            diffInfoList = new DiffInfoList([new DiffInfoTestBuilder('path string', [10, 20, 30, 40]).build()]);
         });
-        it('行番号がDiff範囲1よりも小さい場合', () => {
-            const line = '"commit hash","path string", 9, "comment message"';
-            instance = new CommitComment(commit, line);
-            assert(instance.isInModifiedLine(diffInfoList) === false);
-        });
-        it('行番号がDiff範囲1の下限の場合', () => {
+        it('変更行にマッチする場合1', () => {
             const line = '"commit hash","path string", 10, "comment message"';
             instance = new CommitComment(commit, line);
             assert(instance.isInModifiedLine(diffInfoList) === true);
         });
-        it('行番号がDiff範囲1の上限の場合', () => {
+        it('変更行にマッチする場合2', () => {
             const line = '"commit hash","path string", 20, "comment message"';
             instance = new CommitComment(commit, line);
             assert(instance.isInModifiedLine(diffInfoList) === true);
         });
-        it('行番号がDiff範囲1の上限よりも大きい場合', () => {
-            const line = '"commit hash", "path string", 21, "comment message"';
+        it('変更行にマッチしない場合1', () => {
+            const line = '"commit hash","path string", 9, "comment message"';
             instance = new CommitComment(commit, line);
             assert(instance.isInModifiedLine(diffInfoList) === false);
         });
-        it('行番号がDiff範囲2よりも小さい場合', () => {
-            const line = '"commit hash","path string", 29, "comment message"';
-            instance = new CommitComment(commit, line);
-            assert(instance.isInModifiedLine(diffInfoList) === false);
-        });
-        it('行番号がDiff範囲2の下限の場合', () => {
-            const line = '"commit-hash","path string", 30, "comment message"';
-            instance = new CommitComment(commit, line);
-            assert(instance.isInModifiedLine(diffInfoList) === true);
-        });
-        it('行番号がDiff範囲2の上限の場合', () => {
-            const line = '"commit hash","path string", 40, "comment message"';
-            instance = new CommitComment(commit, line);
-            assert(instance.isInModifiedLine(diffInfoList) === true);
-        });
-        it('行番号がDiff範囲2の上限よりも大きい場合', () => {
-            const line = '"commit hash","path stirng", 41, "comment message"';
+        it('変更行にマッチしない場合2', () => {
+            const line = '"commit hash","path string", 21, "comment message"';
             instance = new CommitComment(commit, line);
             assert(instance.isInModifiedLine(diffInfoList) === false);
         });
@@ -197,7 +175,7 @@ describe('CommitComment', () => {
     });
 
     class DiffInfoTestBuilder extends DiffInfoBuilder {
-        constructor(public filePath: string, public ranges: Range[]) {
+        constructor(public filePath: string, public diffLineNos: number[]) {
             super();
         }
         public build(): DiffInfo {

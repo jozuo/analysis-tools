@@ -1,31 +1,26 @@
-import { Range } from './range';
+import * as jsdiff from 'diff';
 
 export class DiffInfo {
     private filePath: string;
-    private ranges: Range[] = [];
+    private diffLineNos: number[] = [];
 
     constructor(builder: DiffInfoBuilder) {
         this.filePath = builder.filePath || '';
-        this.ranges = builder.ranges;
+        this.diffLineNos = builder.diffLineNos;
     }
 
     public getFilePath(): string {
         return this.filePath;
     }
 
-    public getRanges(): Range[] {
-        return this.ranges;
-    }
-
     public isModifiedLine(lineNo: number): boolean {
-        const result = this.ranges.filter((range) => range.isInside(lineNo));
-        return result.length !== 0;
+        return this.diffLineNos.some((diffLineNo) => diffLineNo === lineNo);
     }
 }
 
 export class DiffInfoBuilder {
     public filePath?: string;
-    public ranges: Range[] = [];
+    public diffLineNos: number[] = [];
 
     private json: any;
 
@@ -36,14 +31,22 @@ export class DiffInfoBuilder {
 
     public build(): DiffInfo {
         this.filePath = this.json.new_path;
-        const matches = this.json.diff.toString().match(/@@ -(\d+?),(\d+?) \+(\d+?),(\d+?) @@/g);
-        if (matches) {
-            this.ranges = matches.map((lineInfo: any) => {
-                const begin = Number(lineInfo.match(/\+(\d+?),(\d+?) /g)[0].split(',')[0].replace('+', ''));
-                const end = begin + Number(lineInfo.match(/\+(\d+?),(\d+?) /g)[0].split(',')[1]);
-                return new Range(begin, end);
-            });
-        }
+
+        // 1ファイルの差分抽出
+        // ここでは1ファイル毎の差分を扱うので、結果は1つしか無い
+        const result = jsdiff.parsePatch(this.json.diff)[0];
+
+        // 対象ファイルの差分情報から、変更行番号を解析
+        result.hunks.forEach((hunk) => {
+            const startLine = hunk.newStart;
+            hunk.lines
+                .filter((line) => !line.startsWith('-'))
+                .forEach((line, index) => {
+                    if (line.startsWith('+')) {
+                        this.diffLineNos.push(startLine + index);
+                    }
+                });
+        });
         return new DiffInfo(this);
     }
 }
