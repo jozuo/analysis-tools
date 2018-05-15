@@ -78,7 +78,6 @@ def setupEnvironment() {
         env.GITLAB_TOKEN = API_TOKEN
         env.GITLAB_BRANCH = env.gitlabTargetBranch
         env.COMMIT_HASH_END = env.gitlabAfter
-        env.DEBUG = true
     }
 }
 
