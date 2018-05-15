@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
-import { anything, capture, instance, mock, verify, when } from 'ts-mockito';
+import { anything, instance, mock, verify, when } from 'ts-mockito';
+import { capture } from 'ts-mockito/lib/ts-mockito';
 import { RequestWrapper } from '../../../app/gitlab/repository/request-wrapper';
 import { DiffInfo } from './../../../app/gitlab/model/diff-info';
 import { CommitDiffRepository } from './../../../app/gitlab/repository/commit-diff-repository';
@@ -38,21 +39,26 @@ describe('DiffInfoRepository', () => {
             let result: DiffInfo;
             result = (diffInfoList as any).diffInfos[0];
             assert(result.getFilePath() === 'app/src/component/area-correction/area-correction.component.ts');
-            assert(result.getRanges().length === 2);
-            assert(JSON.stringify(result.getRanges()[0]) === '{"begin":2,"end":11}');
-            assert(JSON.stringify(result.getRanges()[1]) === '{"begin":36,"end":44}');
+            assert(getDiffLineNos(result).length === 4);
+            assert(getDiffLineNos(result)[0] === 5);
+            assert(getDiffLineNos(result)[1] === 7);
+            assert(getDiffLineNos(result)[2] === 39);
+            assert(getDiffLineNos(result)[3] === 40);
             // - 2ファイル目
             result = (diffInfoList as any).diffInfos[1];
             assert(result.getFilePath() === 'app/src/component/color-matching/color-matching.component.ts');
-            assert(result.getRanges().length === 2);
-            assert(JSON.stringify(result.getRanges()[0]) === '{"begin":15,"end":22}');
-            assert(JSON.stringify(result.getRanges()[1]) === '{"begin":87,"end":105}');
-            // - 3ファイル目
+            assert(getDiffLineNos(result).length === 5);
+            assert(getDiffLineNos(result)[0] === 18);
+            assert(getDiffLineNos(result)[1] === 90);
+            assert(getDiffLineNos(result)[2] === 96);
+            assert(getDiffLineNos(result)[3] === 99);
+            assert(getDiffLineNos(result)[4] === 101);
+            // // - 3ファイル目
             result = (diffInfoList as any).diffInfos[2];
             assert(result.getFilePath() === 'app/src/component/geometry-off/geometry-off.component.ts');
-            assert(result.getRanges().length === 2);
-            assert(JSON.stringify(result.getRanges()[0]) === '{"begin":1,"end":8}');
-            assert(JSON.stringify(result.getRanges()[1]) === '{"begin":25,"end":152}');
+            assert(getDiffLineNos(result).length === 2);
+            assert(getDiffLineNos(result)[0] === 4);
+            assert(getDiffLineNos(result)[1] === 28);
 
             // verify
             verify(mocked.get(anything())).once();
@@ -76,4 +82,7 @@ describe('DiffInfoRepository', () => {
             }
         });
     });
+    function getDiffLineNos(diffInfo: DiffInfo): number[] {
+        return (diffInfo as any).diffLineNos;
+    }
 });
