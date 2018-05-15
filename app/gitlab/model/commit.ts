@@ -50,7 +50,7 @@ export class Commit {
     }
 
     public async postComment(): Promise<boolean> {
-        await this.postIndividualComment(this.getDiffIInfoList());
+        await this.postIndividualComment();
         await this.repository.postSummaryComment(this);
         return true;
     }
@@ -62,10 +62,10 @@ export class Commit {
         return this.diffInfoList;
     }
 
-    private async postIndividualComment(diffInfoList: DiffInfoList): Promise<void> {
+    private async postIndividualComment(): Promise<void> {
         const individualComments = this.commitComments
             .filter((commitComment) => {
-                return commitComment.isInModifiedLine(diffInfoList);
+                return commitComment.isInModifiedLine(this.getDiffIInfoList());
             });
         for (const individualComment of individualComments) {
             await this.repository.postIndividualComment(individualComment);
