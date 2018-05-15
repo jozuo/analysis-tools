@@ -1,9 +1,10 @@
 // --- public
 def init() {
-    initTool()
     setupEnvironment()
     debugEnvironment()
-    changeGitLabStatus('running', 'jenkinsジョブ実行中') 
+    changeGitLabStatusToPending()
+    initTool()
+    changeGitLabStatus('running', 'ジョブ実行中') 
 }
 
 def preProcess() {
@@ -15,15 +16,27 @@ def preProcess() {
 
 def postProcess(commentFilePath) {
     commentToGitLab(commentFilePath)
-    changeGitLabStatus('success', 'jenkinsジョブが正常に終了しました') 
+    changeGitLabStatus('success', 'ジョブが正常に終了しました') 
 }
 
 def errorProcess() {
-    changeGitLabStatus('failed', 'jenkinsジョブが失敗しました') 
+    changeGitLabStatus('failed', 'ジョブが失敗しました') 
 }
 
 
 // --- private
+
+def changeGitLabStatusToPending() {
+    // 時間のかかるツールのビルド前にGitLabのステータスを変更するため`curl`コマンドで実施する
+    sh """
+        ${env.PROXY_SETTING}
+        curl -X POST -H PRIVATE-TOKEN:${env.GITLAB_TOKEN} \
+            ${getGitLabAPIEndPoint()}/statuses/${env.COMMIT_HASH_END} \
+            -F 'state=pending' \
+            -F 'ref=${env.GITLAB_BRANCH}' \
+            -F 'name=ジョブ受付'
+    """
+}
 
 def changeGitLabStatus(status, description=null, coverage=null) {
     docker.image('seig/analysys-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
