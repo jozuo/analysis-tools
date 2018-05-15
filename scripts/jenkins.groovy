@@ -39,7 +39,9 @@ def changeGitLabStatusToPending() {
             ${url}/statuses/${env.COMMIT_HASH_END} \
             -F 'state=pending' \
             -F 'ref=${env.GITLAB_BRANCH}' \
-            -F 'name=ジョブ受付'
+            -F 'name=jenkins' \
+            -F 'target_url=${env.BUILD_URL}' \
+            -F 'description=ジョブを受け付けました'
     """
 }
 
