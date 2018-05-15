@@ -29,8 +29,8 @@ def errorProcess() {
 def changeGitLabStatusToPending() {
     // 時間のかかるツールのビルド前にGitLabのステータスを変更するため`curl`コマンドで実施する
     def base = env.gitlabSourceRepoHomepage
-    base = base.substring(0, url.lastIndexOf('/'))
-    base = base.substring(0, url.lastIndexOf('/'))
+    base = base.substring(0, base.lastIndexOf('/'))
+    base = base.substring(0, base.lastIndexOf('/'))
 
     def url = "${base}/api/v4/projects/${env.GITLAB_PROJECT_ID}"
     sh """
