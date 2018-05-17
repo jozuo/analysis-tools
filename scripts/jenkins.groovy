@@ -1,6 +1,8 @@
 // --- public
 def init() {
+    buildDockerImage()
     setupEnvironment()
+    resolveProjectId()
     debugEnvironment()
     changeGitLabStatusToPending()
     initTool()
@@ -26,17 +28,19 @@ def errorProcess() {
 
 // --- private
 
+def getGitLabApiEndPoint() {
+    def url = env.gitlabSourceRepoHomepage
+    url = url.substring(0, url.lastIndexOf('/'))
+    url = url.substring(0, url.lastIndexOf('/'))
+    return "${url}/api/v4/projects/${env.GITLAB_PROJECT_ID}"
+}
+
 def changeGitLabStatusToPending() {
     // 時間のかかるツールのビルド前にGitLabのステータスを変更するため`curl`コマンドで実施する
-    def base = env.gitlabSourceRepoHomepage
-    base = base.substring(0, base.lastIndexOf('/'))
-    base = base.substring(0, base.lastIndexOf('/'))
-
-    def url = "${base}/api/v4/projects/${env.GITLAB_PROJECT_ID}"
     sh """
         ${env.PROXY_SETTING}
         curl -X POST -H PRIVATE-TOKEN:${env.GITLAB_TOKEN} \
-            ${url}/statuses/${env.COMMIT_HASH_END} \
+            ${getGitLabApiEndPoint()}/statuses/${env.COMMIT_HASH_END} \
             -F 'state=pending' \
             -F 'ref=${env.GITLAB_BRANCH}' \
             -F 'name=jenkins' \
@@ -111,10 +115,15 @@ def cloneSource() {
     }
 }
 
+def buildDockerImage() {
+    dir('node-tool') {
+        docker.build('seig/analysis-tool:latest', "${env.DOCKER_BUILD_OPTION} .")
+    }
+}
+
 def initTool() {
     dir('node-tool') {
-        def image = docker.build('seig/analysis-tool:latest', "${env.DOCKER_BUILD_OPTION} .");
-        image.inside {
+        docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
             sh """
                 ${env.PROXY_SETTING}
                 yarn && tsc || true
@@ -136,7 +145,23 @@ def resolveCommitHashBegin() {
                 '''
             env.COMMIT_HASH_BEGIN = stdout.trim()
         } else { 
-            env.COMMIT_HASH_BEGIN = env.gitLabBefore;
+            env.COMMIT_HASH_BEGIN = env.gitLabBefore
+        }
+    }
+}
+
+def resolveProjectId() {
+    dir('source') {
+        docker.image('seig/analysis-tool:latest').inside {
+            def project_name= "${env.gitlabSourceNamespace}/${env.gitlabSourceRepoName}"
+            def stdout = sh returnStdout: true, script: 
+            """
+                ${env.PROXY_SETTING}
+                curl -H PRIVATE-TOKEN:${env.GITLAB_TOKEN} \
+                    ${getGitLabApiEndPoint()}/projects?simple=true \
+                    | jq 'map(select(.["path_with_namespace"] == \"${project_name}\")) | .[].id'
+            """
+            env.GITLAB_PROJECT_ID = stdout.trim()
         }
     }
 }
