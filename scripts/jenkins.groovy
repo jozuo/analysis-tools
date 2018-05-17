@@ -32,7 +32,7 @@ def getGitLabApiEndPoint() {
     def url = env.gitlabSourceRepoHomepage
     url = url.substring(0, url.lastIndexOf('/'))
     url = url.substring(0, url.lastIndexOf('/'))
-    return "${url}/api/v4/projects/${env.GITLAB_PROJECT_ID}"
+    return "${url}/api/v4"
 }
 
 def changeGitLabStatusToPending() {
@@ -40,7 +40,7 @@ def changeGitLabStatusToPending() {
     sh """
         ${env.PROXY_SETTING}
         curl -X POST -H PRIVATE-TOKEN:${env.GITLAB_TOKEN} \
-            ${getGitLabApiEndPoint()}/statuses/${env.COMMIT_HASH_END} \
+            ${getGitLabApiEndPoint()}/projects/${env.GITLAB_PROJECT_ID}/statuses/${env.COMMIT_HASH_END} \
             -F 'state=pending' \
             -F 'ref=${env.GITLAB_BRANCH}' \
             -F 'name=jenkins' \
