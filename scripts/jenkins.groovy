@@ -50,7 +50,7 @@ def changeGitLabStatusToPending() {
 }
 
 def changeGitLabStatus(status, description=null, coverage=null) {
-    docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+    docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_RUN_OPTION}") {
         sh """
             ${env.PROXY_SETTING}
             cd node-tool
@@ -60,7 +60,7 @@ def changeGitLabStatus(status, description=null, coverage=null) {
 }
 
 def commentToGitLab(commentFilePath) {
-    docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+    docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_RUN_OPTION}") {
         sh """
             ${env.PROXY_SETTING}
             cd node-tool
@@ -123,7 +123,7 @@ def buildDockerImage() {
 
 def initTool() {
     dir('node-tool') {
-        docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_HOST_OPTION}") {
+        docker.image('seig/analysis-tool:latest').inside("${env.DOCKER_RUN_OPTION}") {
             sh """
                 ${env.PROXY_SETTING}
                 yarn && tsc || true
