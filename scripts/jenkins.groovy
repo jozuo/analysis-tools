@@ -35,20 +35,6 @@ def getGitLabApiEndPoint() {
     return "${url}/api/v4"
 }
 
-def changeGitLabStatusToPending() {
-    // 時間のかかるツールのビルド前にGitLabのステータスを変更するため`curl`コマンドで実施する
-    sh """
-        ${env.PROXY_SETTING}
-        curl -X POST -H PRIVATE-TOKEN:${env.GITLAB_TOKEN} \
-            ${getGitLabApiEndPoint()}/projects/${env.GITLAB_PROJECT_ID}/statuses/${env.COMMIT_HASH_END} \
-            -F 'state=pending' \
-            -F 'ref=${env.GITLAB_BRANCH}' \
-            -F 'name=jenkins' \
-            -F 'target_url=${env.BUILD_URL}' \
-            -F 'description=ジョブを受け付けました'
-    """
-}
-
 def changeGitLabStatus(status, description=null, coverage=null) {
     docker.image('seig/analysis-tool:latest').inside(env.DOCKER_RUN_OPTION) {
         sh """
@@ -83,7 +69,6 @@ def debugEnvironment() {
     echo "DEBUG: ${env.DEBUG}"
     if (env.DEBUG == 'true') {
         echo "GITLAB_CREDENTIAL_TOOL: ${env.GITLAB_CREDENTIAL_TOOL}"
-        echo "GITLAB_TOKEN: ${env.GITLAB_TOKEN}"
         echo "GITLAB_URL: ${env.GITLAB_URL}"
         echo "GITLAB_PROJECT_ID: ${env.GITLAB_PROJECT_ID}"
         echo "GITLAB_BRANCH: ${env.GITLAB_BRANCH}"
@@ -97,11 +82,11 @@ def setupEnvironment() {
     withCredentials([
         usernamePassword(
             credentialsId: env.GITLAB_CREDENTIAL_PROJECT,
-            passwordVariable: 'API_TOKEN',
-            usernameVariable: 'API_USER')]) {
+            passwordVariable: 'GITLAB_TOKEN',
+            usernameVariable: 'GITLAB_USER')]) {
 
         env.GITLAB_URL = env.gitlabSourceRepoHomepage
-        env.GITLAB_TOKEN = API_TOKEN
+        env.GITLAB_TOKEN = GITLAB_TOKEN
         env.GITLAB_BRANCH = env.gitlabTargetBranch
         env.COMMIT_HASH_END = env.gitlabAfter
     }
@@ -109,9 +94,9 @@ def setupEnvironment() {
 
 def cloneSource() {
     dir('source') {
-        git url: "${env.gitlabSourceRepoHomepage}.git",
-            branch: env.gitlabTargetBranch,
-            credentialsId: "${env.GITLAB_CREDENTIAL_PROJECT}"
+        git url: "${env.GITLAB_URL}.git",
+            branch: env.GITLAB_BRANCH
+            credentialsId: env.GITLAB_CREDENTIAL_PROJECT
     }
 }
 
@@ -150,18 +135,47 @@ def resolveCommitHashBegin() {
     }
 }
 
+def changeGitLabStatusToPending() {
+    // 時間のかかるツールのビルド前にGitLabのステータスを変更するため`curl`コマンドで実施する
+    withCredentials([
+        usernamePassword(
+            credentialsId: env.GITLAB_CREDENTIAL_PROJECT,
+            passwordVariable: 'GITLAB_TOKEN',
+            usernameVariable: 'GITLAB_USER')]) {
+
+        sh """
+            ${env.PROXY_SETTING}
+            curl -X POST -H PRIVATE-TOKEN:${GITLAB_TOKEN} \
+                ${getGitLabApiEndPoint()}/projects/${env.GITLAB_PROJECT_ID}/statuses/${env.COMMIT_HASH_END} \
+                -F 'state=pending' \
+                -F 'ref=${env.GITLAB_BRANCH}' \
+                -F 'name=jenkins' \
+                -F 'target_url=${env.BUILD_URL}' \
+                -F 'description=ジョブを受け付けました'
+        """
+    }
+}
+
+
 def resolveProjectId() {
     dir('source') {
-        docker.image('seig/analysis-tool:latest').inside {
-            def project_name= "${env.gitlabSourceNamespace}/${env.gitlabSourceRepoName}"
-            def stdout = sh returnStdout: true, script: 
-            """
-                ${env.PROXY_SETTING}
-                curl -H PRIVATE-TOKEN:${env.GITLAB_TOKEN} \
-                    ${getGitLabApiEndPoint()}/projects?simple=true \
-                    | jq 'map(select(.["path_with_namespace"] == \"${project_name}\")) | .[].id'
-            """
-            env.GITLAB_PROJECT_ID = stdout.trim()
+        withCredentials([
+            usernamePassword(
+                credentialsId: env.GITLAB_CREDENTIAL_PROJECT,
+                passwordVariable: 'GITLAB_TOKEN',
+                usernameVariable: 'GITLAB_USER')]) {
+
+            docker.image('seig/analysis-tool:latest').inside {
+                def project_name= "${env.gitlabSourceNamespace}/${env.gitlabSourceRepoName}"
+                def stdout = sh returnStdout: true, script: 
+                """
+                    ${env.PROXY_SETTING}
+                    curl -H PRIVATE-TOKEN:${GITLAB_TOKEN} \
+                        ${getGitLabApiEndPoint()}/projects?simple=true \
+                        | jq 'map(select(.["path_with_namespace"] == \"${project_name}\")) | .[].id'
+                """
+                env.GITLAB_PROJECT_ID = stdout.trim()
+            }
         }
     }
 }
