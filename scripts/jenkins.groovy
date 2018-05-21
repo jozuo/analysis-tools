@@ -6,10 +6,10 @@ def init() {
     debugEnvironment()
     changeGitLabStatusToPending()
     initTool()
-    changeGitLabStatus('running', 'ジョブ実行中') 
 }
 
 def preProcess() {
+    changeGitLabStatus('running', 'ジョブ実行中') 
     cloneSource()
     resolveCommitHashBegin()
     debugEnvironment()
